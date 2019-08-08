@@ -87,9 +87,8 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     } catch (error) {
       await toast.error("Invalid credentials");
 
-      // Todo: Do something when invalid data
       await this.initState();
-      return error;
+      return;
     }
 
     const wantedFields = `
@@ -98,6 +97,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
       email
       username
       createdAt
+      password
     }
     `;
 
@@ -109,11 +109,19 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
       `
     };
 
-    // Todo: Do something with the data
     try {
       // Todo: Use a spinner while fetching
-      const data: IUser = await FetchService.fetchServer(requestBody);
-      console.log(data);
+      const response = await FetchService.fetchServer(requestBody);
+
+      if (response.errors) {
+        toast.error("Invalid credentials");
+        return;
+      }
+
+      const user: IUser = response.data.registerUser;
+      if (user) {
+        console.log(user);
+      }
 
       // Todo: dont keep password
       // await this.setState((state: IAuthState) => {
@@ -123,10 +131,9 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
       return;
     } catch (error) {
       toast.error("An error occurred");
-      console.log("error contacting server");
 
       await this.initState();
-      return error;
+      return;
     }
   };
 
