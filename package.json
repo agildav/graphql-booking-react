@@ -28,8 +28,7 @@
   },
   "pre-commit": [
     "format",
-    "add",
-    "test"
+    "add"
   ],
   "eslintConfig": {
     "extends": "react-app"
