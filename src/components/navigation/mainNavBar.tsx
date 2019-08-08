@@ -7,6 +7,7 @@ import { CustomButton } from "../../shared/components/button.component";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import { NavLink } from "react-router-dom";
+import { IMainNavBarProps } from "./mainNavBar.model";
 import "./mainNavBar.css";
 
 const customStyles = makeStyles(theme => ({
@@ -21,7 +22,9 @@ const customStyles = makeStyles(theme => ({
   }
 }));
 
-export default function MainNavBar() {
+export default function MainNavBar(props: IMainNavBarProps) {
+  const { switchRegisterLogin } = props;
+
   const classes = customStyles();
 
   return (
@@ -43,6 +46,7 @@ export default function MainNavBar() {
             <ul className="main-navbar-items">
               <NavLink to="/auth">
                 <CustomButton
+                  onClick={switchRegisterLogin}
                   size="small"
                   type="button"
                   variant="text"
