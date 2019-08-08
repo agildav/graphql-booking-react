@@ -7,6 +7,7 @@ import Booking from "../components/booking/booking";
 
 import "./App.css";
 
+/** Application's root component */
 class App extends React.Component {
   render() {
     return (

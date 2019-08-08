@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 
 import "./mainNavBar.css";
 
+/** Navigation bar component */
 const MainNavBar = () => {
   return (
     <header id="MainNavBar">
