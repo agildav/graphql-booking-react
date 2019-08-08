@@ -4,17 +4,10 @@ export default class FetchService {
     ? process.env.REACT_APP_API_BASE_URL
     : "";
 
-  /** fetchServer sends a POST request to the server at the given endpoint (if any) with the given request body */
-  static async fetchServer(reqBody: Object, endpoint?: string): Promise<any> {
-    let url: string;
-    if (endpoint) {
-      url = FetchService.SERVER_URL + endpoint;
-    } else {
-      url = FetchService.SERVER_URL;
-    }
-
+  /** fetchServer sends a POST request to the server with the given request body */
+  static async fetchServer(reqBody: Object): Promise<any> {
     try {
-      const res = await fetch(url, {
+      const res = await fetch(FetchService.SERVER_URL, {
         method: "POST",
         body: JSON.stringify(reqBody),
         headers: {
