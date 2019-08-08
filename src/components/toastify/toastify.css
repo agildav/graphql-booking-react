@@ -1,0 +1,5 @@
+.Toastify__toast-container {
+  /* Dont hide the navbar */
+  margin-top: 4rem;
+  user-select: none;
+}

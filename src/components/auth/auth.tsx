@@ -4,6 +4,8 @@ import { CustomButton } from "../../shared/components/button.component";
 import { CustomInputTextField } from "../../shared/components/input.component";
 import { IUserInput, IUser } from "../user/user.model";
 import { IAuthProps, IAuthState, HTMLElementEvent } from "./auth.model";
+import { toast } from "react-toastify";
+
 import "./auth.css";
 
 /** Authentication component */
@@ -83,7 +85,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
         throw new Error("invalid user input");
       }
     } catch (error) {
-      console.log(error);
+      await toast.error("Invalid credentials");
 
       // Todo: Do something when invalid data
       await this.initState();
@@ -120,6 +122,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
       return;
     } catch (error) {
+      toast.error("An error occurred");
       console.log("error contacting server");
 
       await this.initState();

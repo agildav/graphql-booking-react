@@ -4,6 +4,7 @@ import MainNavbar from "../components/navigation/mainNavBar";
 import Auth from "../components/auth/auth";
 import Event from "../components/event/event";
 import Booking from "../components/booking/booking";
+import { Toastify } from "../components/toastify/toastify";
 
 import "./App.css";
 
@@ -15,6 +16,7 @@ class App extends React.Component {
         <div id="App">
           <MainNavbar />
           <main id="MainApp">
+            <Toastify />
             <Switch>
               <Redirect from="/" to="/auth" exact />
               <Route path="/auth" component={Auth} />
