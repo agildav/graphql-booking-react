@@ -9,9 +9,7 @@ export const Toastify = () => {
   // position of toast
   const position = "top-right";
   // in miliseconds
-  const autoCloseDelay = 2000;
-  // transition type
-  const transition = Slide;
+  const autoCloseDelay = 1500;
 
   return (
     <ToastContainer
@@ -24,7 +22,7 @@ export const Toastify = () => {
       rtl={false}
       draggable
       pauseOnHover
-      transition={transition}
+      transition={Slide}
     />
   );
 };

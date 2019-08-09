@@ -1,9 +1,8 @@
 import { IEvent } from "../event/event.model";
+import { IAuthInput } from "../auth/auth.model";
 
 /** Properties received by user */
-export interface IUserInput {
-  email: string;
-  password: string;
+export interface IUserInput extends IAuthInput {
   username?: string;
 }
 

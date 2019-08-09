@@ -5,3 +5,11 @@ export interface IMainNavBarProps {
   appState: IAppState;
   switchRegisterLogin: Function;
 }
+
+export interface INavigation {
+  isAtLogin: boolean;
+  isAtRegister: boolean;
+  isAtEvents: boolean;
+  isAtBookings: boolean;
+  isAtUsers: boolean;
+}

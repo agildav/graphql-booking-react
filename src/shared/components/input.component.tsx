@@ -6,6 +6,8 @@ import TextField from "@material-ui/core/TextField";
 interface CustomInputProps {
   /** input id */
   id?: string;
+  /** autocomplete of input */
+  autoComplete?: "on" | "off";
   /** margin of input */
   margin: "dense" | "none" | "normal";
   /** onChange event */
@@ -30,6 +32,7 @@ export function CustomInputTextField(props: CustomInputProps) {
 
   return (
     <TextField
+      autoComplete={props.autoComplete}
       id={props.id}
       onChange={props.onChange}
       label={props.label}

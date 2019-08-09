@@ -6,17 +6,27 @@ import Event from "../components/event/event";
 import Booking from "../components/booking/booking";
 import { Toastify } from "../components/toastify/toastify";
 import { IAppState } from "./App.model";
+import { IAuth } from "../components/auth/auth.model";
 
 import "./App.css";
 
 /** Application's root component */
 class App extends React.Component<{}, IAppState> {
   initialState: IAppState = {
-    isAtLogin: true,
-    isAtRegister: false,
-    isAtBookings: false,
-    isAtEvents: false,
-    isAtUsers: false
+    navigation: {
+      isAtLogin: true,
+      isAtRegister: false,
+      isAtBookings: false,
+      isAtEvents: false,
+      isAtUsers: false
+    },
+    auth: {
+      email: "",
+      password: "",
+      userId: "",
+      token: "",
+      tokenExpiration: ""
+    }
   };
 
   constructor(props: Readonly<{}>) {
@@ -36,13 +46,26 @@ class App extends React.Component<{}, IAppState> {
     await this.setState((state: IAppState) => {
       return {
         ...state,
-        isAtLogin: !state.isAtLogin,
-        isAtRegister: !state.isAtRegister
+        navigation: {
+          ...state.navigation,
+          isAtLogin: !state.navigation.isAtLogin,
+          isAtRegister: !state.navigation.isAtRegister
+        }
+      };
+    });
+  };
+
+  authUser = async (auth: IAuth) => {
+    await this.setState((state: IAppState) => {
+      return {
+        ...state,
+        auth
       };
     });
   };
 
   render() {
+    const isAuth: boolean = this.state.auth.token.length > 0;
     return (
       <BrowserRouter>
         <div id="App">
@@ -56,10 +79,22 @@ class App extends React.Component<{}, IAppState> {
               <Redirect from="/" to="/auth" exact />
               <Route
                 path="/auth"
-                render={props => <Auth {...props} appState={this.state} />}
+                render={props => (
+                  <Auth
+                    {...props}
+                    appState={this.state}
+                    authUser={this.authUser}
+                  />
+                )}
               />
-              <Route path="/events" component={Event} />
-              <Route path="/bookings" component={Booking} />
+
+              {isAuth && (
+                <React.Fragment>
+                  <Route path="/events" component={Event} />
+                  <Route path="/bookings" component={Booking} />
+                </React.Fragment>
+              )}
+
               <Redirect to="/auth" />
             </Switch>
           </main>

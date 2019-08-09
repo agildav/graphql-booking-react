@@ -3,6 +3,7 @@ import { IAppState } from "../../app/App.model";
 /** Props received by main App */
 export interface IAuthProps {
   appState: IAppState;
+  authUser: Function;
 }
 
 /** Auth input required by user */

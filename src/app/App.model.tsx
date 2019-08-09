@@ -1,7 +1,8 @@
+import { IAuth } from "../components/auth/auth.model";
+import { INavigation } from "../components/navigation/mainNavBar.model";
+
+/** Global main App state */
 export interface IAppState {
-  isAtLogin: boolean;
-  isAtRegister: boolean;
-  isAtEvents: boolean;
-  isAtBookings: boolean;
-  isAtUsers: boolean;
+  navigation: INavigation;
+  auth: IAuth;
 }

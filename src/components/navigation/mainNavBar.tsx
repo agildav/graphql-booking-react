@@ -25,6 +25,7 @@ const customStyles = makeStyles(theme => ({
 export default function MainNavBar(props: IMainNavBarProps) {
   const { appState, switchRegisterLogin } = props;
 
+  const isAuth: boolean = appState.auth.token.length > 0;
   const classes = customStyles();
 
   return (
@@ -44,38 +45,44 @@ export default function MainNavBar(props: IMainNavBarProps) {
           </Typography>
           <nav>
             <ul className="main-navbar-items">
-              <NavLink to="/auth">
-                <CustomButton
-                  onClick={switchRegisterLogin}
-                  size="small"
-                  type="button"
-                  variant="text"
-                  color="inherit"
-                >
-                  {appState.isAtLogin && "Register"}
-                  {appState.isAtRegister && "Login"}
-                </CustomButton>
-              </NavLink>
-              <NavLink to="/events">
-                <CustomButton
-                  size="small"
-                  type="button"
-                  variant="text"
-                  color="inherit"
-                >
-                  Events
-                </CustomButton>
-              </NavLink>
-              <NavLink to="/bookings">
-                <CustomButton
-                  size="small"
-                  type="button"
-                  variant="text"
-                  color="inherit"
-                >
-                  Bookings
-                </CustomButton>
-              </NavLink>
+              {!isAuth && (
+                <NavLink to="/auth">
+                  <CustomButton
+                    onClick={switchRegisterLogin}
+                    size="small"
+                    type="button"
+                    variant="text"
+                    color="inherit"
+                  >
+                    {appState.navigation.isAtLogin && "Register"}
+                    {appState.navigation.isAtRegister && "Login"}
+                  </CustomButton>
+                </NavLink>
+              )}
+              {isAuth && (
+                <NavLink to="/events">
+                  <CustomButton
+                    size="small"
+                    type="button"
+                    variant="text"
+                    color="inherit"
+                  >
+                    Events
+                  </CustomButton>
+                </NavLink>
+              )}
+              {isAuth && (
+                <NavLink to="/bookings">
+                  <CustomButton
+                    size="small"
+                    type="button"
+                    variant="text"
+                    color="inherit"
+                  >
+                    Bookings
+                  </CustomButton>
+                </NavLink>
+              )}
             </ul>
           </nav>
         </Toolbar>

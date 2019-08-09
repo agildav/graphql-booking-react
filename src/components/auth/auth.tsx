@@ -161,11 +161,21 @@ class Auth extends React.Component<IAuthProps, IAuth> {
       }
 
       toast.success("Welcome to gEvent!");
-      console.log(user.login);
+      console.log(this.props.appState);
+      console.log(user);
+
       // Todo: dont keep password
-      // await this.setState((state: IAuth) => {
-      //   return this.initialState;
-      // });
+      await this.setState((state: IAuth) => {
+        return {
+          userId: user.login.userId,
+          email: userInput.email,
+          password: "",
+          token: user.login.token,
+          tokenExpiration: user.login.tokenExpiration
+        };
+      });
+
+      await this.props.authUser(this.state);
 
       return;
     } catch (error) {
@@ -197,8 +207,9 @@ class Auth extends React.Component<IAuthProps, IAuth> {
     }
 
     // Choose between register | login
-    if (this.props.appState.isAtRegister || this.props.appState.isAtLogin) {
-      if (this.props.appState.isAtRegister) {
+    const { navigation } = this.props.appState;
+    if (navigation.isAtRegister || navigation.isAtLogin) {
+      if (navigation.isAtRegister) {
         return this.register(userInput);
       } else {
         return this.login(userInput);
@@ -218,6 +229,7 @@ class Auth extends React.Component<IAuthProps, IAuth> {
       <form id="Auth" onSubmit={this.handleAuthUser}>
         <div className="form-control">
           <CustomInputTextField
+            autoComplete="on"
             onChange={this.onEmailInputChange}
             label="Email"
             type="email"
@@ -228,6 +240,7 @@ class Auth extends React.Component<IAuthProps, IAuth> {
         </div>
         <div className="form-control">
           <CustomInputTextField
+            autoComplete="on"
             onChange={this.onPasswordInputChange}
             label="Password"
             type="password"
@@ -243,8 +256,8 @@ class Auth extends React.Component<IAuthProps, IAuth> {
             variant="contained"
             color="primary"
           >
-            {appState.isAtLogin && "Login"}
-            {appState.isAtRegister && "Register"}
+            {appState.navigation.isAtLogin && "Login"}
+            {appState.navigation.isAtRegister && "Register"}
           </CustomButton>
         </div>
       </form>
