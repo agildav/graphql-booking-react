@@ -1,12 +1,10 @@
 import React from "react";
-import { BrowserRouter, Route, Redirect, Switch } from "react-router-dom";
 import MainNavbar from "../components/navigation/mainNavBar";
-import Auth from "../components/auth/auth";
-import Event from "../components/event/event";
-import Booking from "../components/booking/booking";
-import { Toastify } from "../components/toastify/toastify";
 import { IAppState } from "./App.model";
 import { IAuth } from "../components/auth/auth.model";
+import { INavigation } from "../components/navigation/mainNavBar.model";
+import { BrowserRouter } from "react-router-dom";
+import Router from "./Router";
 
 import "./App.css";
 
@@ -41,7 +39,7 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
-  /** Handles switching between register and login */
+  /** Handles switching between register and login (updates the navigation state) */
   switchAuthModeChange = async () => {
     await this.setState((state: IAppState) => {
       return {
@@ -55,51 +53,46 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  /** Updates the app auth state */
   authUser = async (auth: IAuth) => {
     await this.setState((state: IAppState) => {
       return {
         ...state,
+        navigation: {
+          ...state.navigation,
+          isAtLogin: false,
+          isAtRegister: false
+        },
         auth
       };
     });
   };
 
+  /** Updates the navigation location */
+  updateNavigation = async (navigation: INavigation) => {
+    await this.setState((state: IAppState) => {
+      return {
+        ...state,
+        navigation
+      };
+    });
+  };
+
   render() {
-    const isAuth: boolean = this.state.auth.token.length > 0;
     return (
-      <BrowserRouter>
-        <div id="App">
+      <div id="App">
+        <BrowserRouter>
           <MainNavbar
             appState={this.state}
             switchRegisterLogin={this.switchAuthModeChange}
           />
-          <main id="MainApp">
-            <Toastify />
-            <Switch>
-              <Redirect from="/" to="/auth" exact />
-              <Route
-                path="/auth"
-                render={props => (
-                  <Auth
-                    {...props}
-                    appState={this.state}
-                    authUser={this.authUser}
-                  />
-                )}
-              />
-
-              {isAuth && (
-                <React.Fragment>
-                  <Route path="/events" component={Event} />
-                  <Route path="/bookings" component={Booking} />
-                </React.Fragment>
-              )}
-
-              <Redirect to="/auth" />
-            </Switch>
-          </main>
-        </div>
-      </BrowserRouter>
+          <Router
+            appState={this.state}
+            authUser={this.authUser}
+            updateNavigation={this.updateNavigation}
+          />
+        </BrowserRouter>
+      </div>
     );
   }
 }

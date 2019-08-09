@@ -161,8 +161,6 @@ class Auth extends React.Component<IAuthProps, IAuth> {
       }
 
       toast.success("Welcome to gEvent!");
-      console.log(this.props.appState);
-      console.log(user);
 
       // Todo: dont keep password
       await this.setState((state: IAuth) => {

@@ -41,7 +41,7 @@ export default function MainNavBar(props: IMainNavBarProps) {
             <MenuIcon />
           </IconButton>
           <Typography align="left" variant="h5" className={classes.title}>
-            gEvent
+            <NavLink to="/">gEvent</NavLink>
           </Typography>
           <nav>
             <ul className="main-navbar-items">
