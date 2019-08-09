@@ -2,23 +2,19 @@ import React, { FormEvent, SyntheticEvent } from "react";
 import FetchService from "../../shared/fetch.service";
 import { CustomButton } from "../../shared/components/button.component";
 import { CustomInputTextField } from "../../shared/components/input.component";
-import { IUserInput, IUser } from "../user/user.model";
-import { IAuthProps, IAuthState, HTMLElementEvent } from "./auth.model";
+import { IUser } from "../user/user.model";
+import { IAuthProps, IAuth, IAuthInput, HTMLElementEvent } from "./auth.model";
 import { toast } from "react-toastify";
+import { IAppState } from "../../app/App.model";
 import "./auth.css";
 
-import { IAppState } from "../../app/App.model";
-
 /** Authentication component */
-class Auth extends React.Component<IAuthProps, IAuthState> {
-  initialState: IAuthState = {
-    // User fields
-    _id: "",
+class Auth extends React.Component<IAuthProps, IAuth> {
+  initialState: IAuth = {
+    // Input fields
     email: "",
     password: "",
-    username: "",
-    createdAt: "",
-    createdEvents: [],
+
     // Auth fields
     token: "",
     tokenExpiration: "",
@@ -33,7 +29,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
   /** Re-starts the state */
   initState = async () => {
-    await this.setState((state: IAuthState) => {
+    await this.setState((state: IAuth) => {
       return this.initialState;
     });
   };
@@ -44,8 +40,9 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
     const target: HTMLElementEvent = event.target;
 
-    this.setState((state: IAuthState) => {
+    this.setState((state: IAuth) => {
       return {
+        ...state,
         email: target.value
       };
     });
@@ -57,15 +54,16 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
     const target: HTMLElementEvent = event.target;
 
-    this.setState((state: IAuthState) => {
+    this.setState((state: IAuth) => {
       return {
+        ...state,
         password: target.value
       };
     });
   };
 
   /** checks if the user credentials are valid */
-  isValidUserInput(userInput: IUserInput): boolean {
+  isValidUserInput(userInput: IAuthInput): boolean {
     if (
       userInput.email.trim().length === 0 ||
       userInput.password.trim().length === 0
@@ -76,7 +74,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
   }
 
   /** signs up a user */
-  register = async (userInput: IUserInput) => {
+  register = async (userInput: IAuthInput) => {
     const wantedFields = `
         {
           _id
@@ -101,21 +99,21 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
       if (response.errors) {
         toast.error("That email is already registered!");
-        // await this.initState();
+
         return;
       }
 
-      const user: IUser = response.data;
+      const user: { registerUser: IUser } = response.data;
       if (!user) {
         toast.error("An error occurred while signing up");
-        // await this.initState();
+
         return;
       }
 
       toast.success("Welcome to gEvent!");
-      console.log(user);
+      console.log(user.registerUser);
       // Todo: dont keep password
-      // await this.setState((state: IAuthState) => {
+      // await this.setState((state: IAuth) => {
       //   return this.initialState;
       // });
 
@@ -123,13 +121,12 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     } catch (error) {
       toast.error("Sorry, could not register");
 
-      // await this.initState();
       return;
     }
   };
 
   /** signs in a user */
-  login = async (userInput: IUserInput) => {
+  login = async (userInput: IAuthInput) => {
     const wantedFields = `
         {
           userId
@@ -152,21 +149,21 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
       if (response.errors) {
         toast.error("Invalid credentials");
-        // await this.initState();
+
         return;
       }
 
-      const user: IAuthState = response.data;
+      const user: { login: IAuth } = response.data;
       if (!user) {
         toast.error("An error occurred while signing in");
-        // await this.initState();
+
         return;
       }
 
       toast.success("Welcome to gEvent!");
-      console.log(user);
+      console.log(user.login);
       // Todo: dont keep password
-      // await this.setState((state: IAuthState) => {
+      // await this.setState((state: IAuth) => {
       //   return this.initialState;
       // });
 
@@ -174,7 +171,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     } catch (error) {
       toast.error("Sorry, could not login");
 
-      // await this.initState();
       return;
     }
   };
@@ -183,7 +179,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
   handleAuthUser = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
 
-    const userInput: IUserInput = {
+    const userInput: IAuthInput = {
       email: this.state.email,
       password: this.state.password
     };
@@ -197,7 +193,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     } catch (error) {
       await toast.error("Invalid credentials");
 
-      // await this.initState();
       return;
     }
 
@@ -212,13 +207,13 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
       // Invalid route for this handler
       await toast.error("An error occurred");
 
-      // await this.initState();
       return;
     }
   };
 
   render() {
     const appState: IAppState = this.props.appState;
+
     return (
       <form id="Auth" onSubmit={this.handleAuthUser}>
         <div className="form-control">
