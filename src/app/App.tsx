@@ -5,9 +5,9 @@ import Auth from "../components/auth/auth";
 import Event from "../components/event/event";
 import Booking from "../components/booking/booking";
 import { Toastify } from "../components/toastify/toastify";
+import { IAppState } from "./App.model";
 
 import "./App.css";
-import { IAppState } from "./App.model";
 
 /** Application's root component */
 class App extends React.Component<{}, IAppState> {
@@ -19,9 +19,8 @@ class App extends React.Component<{}, IAppState> {
     isAtUsers: false
   };
 
-  constructor() {
-    super({});
-
+  constructor(props: Readonly<{}>) {
+    super(props);
     this.state = this.initialState;
   }
 
@@ -55,7 +54,10 @@ class App extends React.Component<{}, IAppState> {
             <Toastify />
             <Switch>
               <Redirect from="/" to="/auth" exact />
-              <Route path="/auth" component={Auth} />
+              <Route
+                path="/auth"
+                render={props => <Auth {...props} appState={this.state} />}
+              />
               <Route path="/events" component={Event} />
               <Route path="/bookings" component={Booking} />
               <Redirect to="/auth" />

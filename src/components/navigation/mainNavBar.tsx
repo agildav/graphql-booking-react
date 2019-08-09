@@ -23,7 +23,7 @@ const customStyles = makeStyles(theme => ({
 }));
 
 export default function MainNavBar(props: IMainNavBarProps) {
-  const { switchRegisterLogin } = props;
+  const { appState, switchRegisterLogin } = props;
 
   const classes = customStyles();
 
@@ -52,7 +52,8 @@ export default function MainNavBar(props: IMainNavBarProps) {
                   variant="text"
                   color="inherit"
                 >
-                  Login/Register
+                  {appState.isAtLogin && "Register"}
+                  {appState.isAtRegister && "Login"}
                 </CustomButton>
               </NavLink>
               <NavLink to="/events">

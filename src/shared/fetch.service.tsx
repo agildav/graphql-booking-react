@@ -21,14 +21,11 @@ export default class FetchService {
         }
       });
 
-      if (res.status !== 200 && res.status !== 201) {
-        throw new Error(`failed, got response status ${res.status.toString()}`);
-      }
-
       const response: IResponse = await res.json();
 
       return response;
     } catch (error) {
+      console.log(error);
       throw error;
     }
   }
