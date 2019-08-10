@@ -24,4 +24,5 @@ export interface IEvent extends IEventInput {
 /** Event state */
 export interface IEventState {
   events: IEvent[];
+  isCreatingEvent: boolean;
 }

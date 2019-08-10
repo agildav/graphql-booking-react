@@ -3,14 +3,20 @@ import FetchService from "../../shared/fetch.service";
 import { CustomButton } from "../../shared/components/button.component";
 import { CustomInputTextField } from "../../shared/components/input.component";
 import { IUser } from "../user/user.model";
-import { IAuthProps, IAuth, IAuthInput, HTMLElementEvent } from "./auth.model";
+import {
+  IAuthProps,
+  IAuth,
+  IAuthInput,
+  HTMLElementEvent,
+  IAuthState
+} from "./auth.model";
 import { toast } from "react-toastify";
 import { IAppState } from "../../app/App.model";
 import "./auth.css";
 
 /** Authentication component */
-class Auth extends React.Component<IAuthProps, IAuth> {
-  initialState: IAuth = {
+class Auth extends React.Component<IAuthProps, IAuthState> {
+  initialState: IAuthState = {
     // Input fields
     email: "",
     password: "",
@@ -18,7 +24,8 @@ class Auth extends React.Component<IAuthProps, IAuth> {
     // Auth fields
     token: "",
     tokenExpiration: "",
-    userId: ""
+    userId: "",
+    isHandlingAuth: false
   };
 
   constructor(props: IAuthProps) {
@@ -28,8 +35,8 @@ class Auth extends React.Component<IAuthProps, IAuth> {
   }
 
   /** Re-starts the state */
-  initState = async () => {
-    await this.setState((state: IAuth) => {
+  initState = () => {
+    this.setState((state: IAuthState) => {
       return this.initialState;
     });
   };
@@ -40,7 +47,7 @@ class Auth extends React.Component<IAuthProps, IAuth> {
 
     const target: HTMLElementEvent = event.target;
 
-    this.setState((state: IAuth) => {
+    this.setState((state: IAuthState) => {
       return {
         ...state,
         email: target.value
@@ -54,7 +61,7 @@ class Auth extends React.Component<IAuthProps, IAuth> {
 
     const target: HTMLElementEvent = event.target;
 
-    this.setState((state: IAuth) => {
+    this.setState((state: IAuthState) => {
       return {
         ...state,
         password: target.value
@@ -94,26 +101,30 @@ class Auth extends React.Component<IAuthProps, IAuth> {
     };
 
     try {
-      // Todo: Use a spinner while fetching
       const response = await FetchService.fetchServer(requestBody);
 
       if (response.errors) {
         toast.error("That email is already registered!");
+
+        this.setState((state: IAuthState) => {
+          return {
+            ...state,
+            isHandlingAuth: false
+          };
+        });
 
         return;
       }
 
       const user: { registerUser: IUser } = response.data;
       if (!user) {
-        toast.error("An error occurred while signing up");
-
-        return;
+        throw new Error("An error occurred while signing up");
       }
 
       toast.success("Welcome to gEvent!");
       console.log(user.registerUser);
-      // Todo: dont keep password
-      // await this.setState((state: IAuth) => {
+      // Todo: login automatically
+      // await this.setState((state: IAuthState) => {
       //   return this.initialState;
       // });
 
@@ -121,7 +132,7 @@ class Auth extends React.Component<IAuthProps, IAuth> {
     } catch (error) {
       toast.error("Sorry, could not register");
 
-      return;
+      throw error;
     }
   };
 
@@ -144,42 +155,46 @@ class Auth extends React.Component<IAuthProps, IAuth> {
     };
 
     try {
-      // Todo: Use a spinner while fetching
       const response = await FetchService.fetchServer(requestBody);
 
       if (response.errors) {
         toast.error("Invalid credentials");
+
+        this.setState((state: IAuthState) => {
+          return {
+            ...state,
+            isHandlingAuth: false
+          };
+        });
 
         return;
       }
 
       const user: { login: IAuth } = response.data;
       if (!user) {
-        toast.error("An error occurred while signing in");
-
-        return;
+        throw new Error("An error occurred while signing in");
       }
 
       toast.success("Welcome to gEvent!");
 
-      // Todo: dont keep password
-      await this.setState((state: IAuth) => {
+      this.setState((state: IAuthState) => {
         return {
           userId: user.login.userId,
           email: userInput.email,
           password: "",
           token: user.login.token,
-          tokenExpiration: user.login.tokenExpiration
+          tokenExpiration: user.login.tokenExpiration,
+          isHandlingAuth: false
         };
       });
 
-      await this.props.authUser(this.state);
+      this.props.authUser(this.state);
 
       return;
     } catch (error) {
       toast.error("Sorry, could not login");
 
-      return;
+      throw error;
     }
   };
 
@@ -187,13 +202,20 @@ class Auth extends React.Component<IAuthProps, IAuth> {
   handleAuthUser = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
 
+    this.setState((state: IAuthState) => {
+      return {
+        ...state,
+        isHandlingAuth: true
+      };
+    });
+
     const userInput: IAuthInput = {
       email: this.state.email,
       password: this.state.password
     };
 
     try {
-      const valid = await this.isValidUserInput(userInput);
+      const valid = this.isValidUserInput(userInput);
 
       if (!valid) {
         throw new Error("invalid user input");
@@ -201,20 +223,43 @@ class Auth extends React.Component<IAuthProps, IAuth> {
     } catch (error) {
       await toast.error("Invalid credentials");
 
+      this.setState((state: IAuthState) => {
+        return {
+          ...state,
+          isHandlingAuth: false
+        };
+      });
+
       return;
     }
 
     // Choose between register | login
     const { navigation } = this.props.appState;
     if (navigation.isAtRegister || navigation.isAtLogin) {
-      if (navigation.isAtRegister) {
-        return this.register(userInput);
-      } else {
-        return this.login(userInput);
+      try {
+        if (navigation.isAtRegister) {
+          await this.register(userInput);
+        } else {
+          await this.login(userInput);
+        }
+      } catch (error) {
+        this.setState((state: IAuthState) => {
+          return {
+            ...state,
+            isHandlingAuth: false
+          };
+        });
       }
     } else {
       // Invalid route for this handler
       await toast.error("An error occurred");
+
+      this.setState((state: IAuthState) => {
+        return {
+          ...state,
+          isHandlingAuth: false
+        };
+      });
 
       return;
     }
@@ -249,6 +294,7 @@ class Auth extends React.Component<IAuthProps, IAuth> {
         </div>
         <div className="form-actions">
           <CustomButton
+            disabled={this.state.isHandlingAuth}
             size="medium"
             type="submit"
             variant="contained"

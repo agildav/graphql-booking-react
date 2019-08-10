@@ -1,8 +1,8 @@
 import React from "react";
 import MainNavbar from "../components/navigation/mainNavBar";
 import { IAppState } from "./App.model";
-import { IAuth } from "../components/auth/auth.model";
-import { INavigation } from "../components/navigation/mainNavBar.model";
+import { IAuthState } from "../components/auth/auth.model";
+import { INavigationState } from "../components/navigation/mainNavBar.model";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./Router";
 
@@ -23,7 +23,8 @@ class App extends React.Component<{}, IAppState> {
       password: "",
       userId: "",
       token: "",
-      tokenExpiration: ""
+      tokenExpiration: "",
+      isHandlingAuth: false
     }
   };
 
@@ -33,15 +34,15 @@ class App extends React.Component<{}, IAppState> {
   }
 
   /** Re-starts the state */
-  initState = async () => {
-    await this.setState((state: IAppState) => {
+  initState = () => {
+    this.setState((state: IAppState) => {
       return this.initialState;
     });
   };
 
   /** Handles switching between register and login (updates the navigation state) */
-  switchAuthModeChange = async () => {
-    await this.setState((state: IAppState) => {
+  switchAuthModeChange = () => {
+    this.setState((state: IAppState) => {
       return {
         ...state,
         navigation: {
@@ -54,8 +55,8 @@ class App extends React.Component<{}, IAppState> {
   };
 
   /** Updates the app auth state */
-  authUser = async (auth: IAuth) => {
-    await this.setState((state: IAppState) => {
+  authUser = (auth: IAuthState) => {
+    this.setState((state: IAppState) => {
       return {
         ...state,
         navigation: {
@@ -68,13 +69,13 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
-  logoutUser = async () => {
-    await this.initState();
+  logoutUser = () => {
+    this.initState();
   };
 
   /** Updates the navigation location */
-  updateNavigation = async (navigation: INavigation) => {
-    await this.setState((state: IAppState) => {
+  updateNavigation = (navigation: INavigationState) => {
+    this.setState((state: IAppState) => {
       return {
         ...state,
         navigation

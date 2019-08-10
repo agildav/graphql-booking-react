@@ -1,21 +1,26 @@
+/* Main navbar */
 #MainNavBar {
   user-select: none;
   width: 100%;
 }
 
+/* All elements inside the navbar */
 #MainNavBar a {
   color: white;
+  margin: 0 0.5rem;
   text-decoration: none;
 }
 
-#MainNavBar a:not(:last-child) {
-  margin: 0 0.5rem;
+/* Navigation items container */
+.main-navbar-items {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
-#MainNavBar a:last-child {
-  margin-left: 0.5rem;
-}
-
+/* Each navigation item */
 .main-navbar-items a:hover button,
 .main-navbar-items a:active button,
 .main-navbar-items a.active button {

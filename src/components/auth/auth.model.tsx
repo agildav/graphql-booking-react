@@ -12,11 +12,16 @@ export interface IAuthInput {
   password: string;
 }
 
-/** Auth state */
+/** Auth model */
 export interface IAuth extends IAuthInput {
   userId: string;
   token: string;
   tokenExpiration: string;
+}
+
+/** Auth state */
+export interface IAuthState extends IAuth {
+  isHandlingAuth: boolean;
 }
 
 /** Adapter between HTML elements and events with EventTarget */

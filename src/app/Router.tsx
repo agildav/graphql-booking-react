@@ -14,11 +14,11 @@ interface IRouterProps {
 }
 
 /** Router state */
-interface IRouter {}
+interface IRouterState {}
 
 /** Router component */
-class Router extends React.Component<IRouterProps, IRouter> {
-  initialState: IRouter = {};
+class Router extends React.Component<IRouterProps, IRouterState> {
+  initialState: IRouterState = {};
 
   constructor(props: IRouterProps) {
     super(props);

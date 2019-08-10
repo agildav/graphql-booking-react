@@ -12,3 +12,6 @@ export interface IUser extends IUserInput {
   createdAt: string;
   createdEvents: IEvent[] | string[];
 }
+
+/** User state */
+export interface IUserState extends IUser {}

@@ -1,9 +1,19 @@
+/* Main auth form section */
 #Auth {
   margin: auto;
   max-width: 80%;
-  width: 25rem;
+  width: 20rem;
 }
 
-form .form-actions {
+/* Each input */
+#Auth .form-control div {
+  width: 100%;
+  width: -moz-available;
+  width: -webkit-fill-available;
+  width: stretch;
+}
+
+/* Action button */
+#Auth .form-actions {
   margin-top: 1rem;
 }
