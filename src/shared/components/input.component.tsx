@@ -1,7 +1,6 @@
 import React from "react";
 // import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import TextareaAutosize from "@material-ui/core/TextareaAutosize";
 
 /** Custom props for this input */
 export interface CustomInputTextFieldProps {
@@ -25,15 +24,12 @@ export interface CustomInputTextFieldProps {
   fullWidth?: boolean;
   /** max length of input */
   maxLength?: number;
-}
-/** Custom props for this input */
-export interface CustomInputTextAreaProps {
-  /** aria label for this input */
-  "aria-label"?: string;
-  /** minimum text area rows */
+  /** convert this into a textarea like */
+  multiline?: boolean;
+  /** number of initial rows */
   rows?: number;
-  /** placeholder for this input */
-  placeholder?: string;
+  /** max number of rows */
+  rowsMax?: number;
 }
 
 // const customInputTextFieldStyles = makeStyles(theme => ({
@@ -52,8 +48,4 @@ export function CustomInputTextField(props: CustomInputTextFieldProps) {
       {...props}
     />
   );
-}
-
-export function CustomInputTextArea(props: CustomInputTextAreaProps) {
-  return <TextareaAutosize {...props} />;
 }

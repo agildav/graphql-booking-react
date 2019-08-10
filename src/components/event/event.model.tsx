@@ -12,17 +12,18 @@ export interface IEventInput {
   title: string;
   description: string;
   price: number;
+  date: string;
 }
 
 /** Event model */
 export interface IEvent extends IEventInput {
   _id: any;
-  date: string;
+  createdAt: string;
   creator: IUser | string;
 }
 
 /** Event state */
 export interface IEventState {
   events: IEvent[];
-  isCreatingEvent: boolean;
+  createEventInput: IEventInput;
 }

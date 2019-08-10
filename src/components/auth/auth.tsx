@@ -3,15 +3,10 @@ import FetchService from "../../shared/fetch.service";
 import { CustomButton } from "../../shared/components/button.component";
 import { CustomInputTextField } from "../../shared/components/input.component";
 import { IUser } from "../user/user.model";
-import {
-  IAuthProps,
-  IAuth,
-  IAuthInput,
-  HTMLElementEvent,
-  IAuthState
-} from "./auth.model";
+import { IAuthProps, IAuth, IAuthInput, IAuthState } from "./auth.model";
 import { toast } from "react-toastify";
 import { IAppState } from "../../app/App.model";
+import { HTMLElementEvent } from "../../shared/adapter.model";
 import "./auth.css";
 
 /** Authentication component */
@@ -69,10 +64,8 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
   /** checks if the user credentials are valid */
   isValidUserInput(userInput: IAuthInput): boolean {
-    if (
-      userInput.email.trim().length === 0 ||
-      userInput.password.trim().length === 0
-    ) {
+    const { email, password } = userInput;
+    if (email.length < 1 || password.length < 1) {
       return false;
     }
     return true;
@@ -221,9 +214,10 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
         };
       },
       async () => {
+        // sanitize
         const userInput: IAuthInput = {
-          email: this.state.email,
-          password: this.state.password
+          email: this.state.email.trim(),
+          password: this.state.password.trim()
         };
 
         try {
