@@ -8,6 +8,14 @@
   text-decoration: none;
 }
 
+#MainNavBar a:not(:last-child) {
+  margin: 0 0.5rem;
+}
+
+#MainNavBar a:last-child {
+  margin-left: 0.5rem;
+}
+
 .main-navbar-items a:hover button,
 .main-navbar-items a:active button,
 .main-navbar-items a.active button {

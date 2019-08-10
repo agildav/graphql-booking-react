@@ -4,6 +4,7 @@ import { IAppState } from "../../app/App.model";
 export interface IMainNavBarProps {
   appState: IAppState;
   switchRegisterLogin: Function;
+  logout: Function;
 }
 
 export interface INavigation {

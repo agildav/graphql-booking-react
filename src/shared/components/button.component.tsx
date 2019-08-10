@@ -4,29 +4,28 @@ import { makeStyles } from "@material-ui/core/styles";
 import { blueGrey } from "@material-ui/core/colors";
 
 /** Custom props for this button */
-interface CustomButtonProps {
+export interface CustomButtonProps {
   /** id of button */
   id?: string;
   /** children passed */
   children?: any;
   /** color of button */
-  color: "inherit" | "primary" | "secondary" | "default" | undefined;
+  color?: "inherit" | "primary" | "secondary" | "default";
   /** disabled button */
-  disabled?: boolean | undefined;
+  disabled?: boolean;
   /** onClick event handler */
   onClick?: any;
   /** size of button */
-  size: "small" | "medium" | "large" | undefined;
+  size?: "small" | "medium" | "large";
   /** type of button */
-  type: "button" | "reset" | "submit" | undefined;
+  type?: "button" | "reset" | "submit";
   /** variant type of button */
-  variant: "text" | "outlined" | "contained" | undefined;
+  variant?: "text" | "outlined" | "contained";
 }
 
 const customStyles = makeStyles({
   /** Base button */
   root: {
-    color: "white",
     font: "inherit",
     textDecoration: "none"
   },
@@ -38,6 +37,12 @@ const customStyles = makeStyles({
   secondary: {
     background: blueGrey[300],
     "&:hover": {
+      backgroundColor: blueGrey[500]
+    },
+    "&:active": {
+      backgroundColor: blueGrey[500]
+    },
+    "&.active": {
       backgroundColor: blueGrey[500]
     }
   }

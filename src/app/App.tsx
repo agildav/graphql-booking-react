@@ -68,6 +68,10 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  logoutUser = async () => {
+    await this.initState();
+  };
+
   /** Updates the navigation location */
   updateNavigation = async (navigation: INavigation) => {
     await this.setState((state: IAppState) => {
@@ -85,6 +89,7 @@ class App extends React.Component<{}, IAppState> {
           <MainNavbar
             appState={this.state}
             switchRegisterLogin={this.switchAuthModeChange}
+            logout={this.logoutUser}
           />
           <Router
             appState={this.state}

@@ -1,19 +1,23 @@
 import React from "react";
-import { IEventProps, IEvent } from "./event.model";
+import { IEventProps, IEventState } from "./event.model";
 import { INavigation } from "../navigation/mainNavBar.model";
+import { CustomModalDialog } from "../../shared/components/modal.component";
+import "./event.css";
 
 /** Event component */
-class Event extends React.Component<IEventProps, IEvent[]> {
-  initialState: IEvent[] = [
-    {
-      _id: "",
-      creator: "",
-      date: "",
-      description: "",
-      price: 0,
-      title: ""
-    }
-  ];
+class Event extends React.Component<IEventProps, IEventState> {
+  initialState: IEventState = {
+    events: [
+      {
+        _id: "",
+        creator: "",
+        date: "",
+        description: "",
+        price: 0,
+        title: ""
+      }
+    ]
+  };
 
   constructor(props: IEventProps) {
     super(props);
@@ -32,7 +36,41 @@ class Event extends React.Component<IEventProps, IEvent[]> {
   }
 
   render() {
-    return <h1>Event page</h1>;
+    return (
+      <React.Fragment>
+        <div id="EventsControl">
+          <CustomModalDialog
+            modalId="create-event-modal"
+            modalTitle="Create a new event!"
+            canCancel={true}
+            canConfirm={true}
+            openModalButton={{
+              color: "primary",
+              size: "large",
+              variant: "contained",
+              type: "button",
+              title: "Create event"
+            }}
+            cancelModalButton={{
+              color: "primary",
+              size: "large",
+              variant: "contained",
+              type: "button",
+              title: "Cancel"
+            }}
+            confirmModalButton={{
+              color: "primary",
+              size: "large",
+              variant: "contained",
+              type: "button",
+              title: "Create"
+            }}
+          >
+            <p>ola k ase</p>
+          </CustomModalDialog>
+        </div>
+      </React.Fragment>
+    );
   }
 }
 

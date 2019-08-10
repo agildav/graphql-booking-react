@@ -20,3 +20,8 @@ export interface IEvent extends IEventInput {
   date: string;
   creator: IUser | string;
 }
+
+/** Event state */
+export interface IEventState {
+  events: IEvent[];
+}

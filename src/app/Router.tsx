@@ -33,7 +33,6 @@ class Router extends React.Component<IRouterProps, IRouter> {
       <main id="MainApp">
         <Toastify />
         <Switch>
-          {!isAuth && <Redirect from="/" to="/auth" exact />}
           {isAuth && <Redirect from="/" to="/events" exact />}
           {isAuth && <Redirect from="/auth" to="/events" exact />}
           {!isAuth && (
@@ -74,7 +73,8 @@ class Router extends React.Component<IRouterProps, IRouter> {
             </React.Fragment>
           )}
 
-          <Redirect to="/auth" />
+          {isAuth && <Redirect to="/events" />}
+          {!isAuth && <Redirect to="/auth" />}
         </Switch>
       </main>
     );

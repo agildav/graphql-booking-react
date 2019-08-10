@@ -11,3 +11,8 @@ export interface IBookingInput {}
 
 /** Event model */
 export interface IBooking extends IBookingInput {}
+
+/** Booking state */
+export interface IBookingState {
+  bookings: IBooking[];
+}

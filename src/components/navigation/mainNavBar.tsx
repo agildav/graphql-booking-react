@@ -14,16 +14,14 @@ const customStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
   },
-  menuButton: {
-    marginRight: theme.spacing(2)
-  },
+  menuButton: {},
   title: {
     flexGrow: 1
   }
 }));
 
 export default function MainNavBar(props: IMainNavBarProps) {
-  const { appState, switchRegisterLogin } = props;
+  const { appState, switchRegisterLogin, logout } = props;
 
   const isAuth: boolean = appState.auth.token.length > 0;
   const classes = customStyles();
@@ -51,8 +49,8 @@ export default function MainNavBar(props: IMainNavBarProps) {
                     onClick={switchRegisterLogin}
                     size="small"
                     type="button"
-                    variant="text"
-                    color="inherit"
+                    variant="contained"
+                    color="primary"
                   >
                     {appState.navigation.isAtLogin && "Register"}
                     {appState.navigation.isAtRegister && "Login"}
@@ -60,28 +58,41 @@ export default function MainNavBar(props: IMainNavBarProps) {
                 </NavLink>
               )}
               {isAuth && (
-                <NavLink to="/events">
-                  <CustomButton
-                    size="small"
-                    type="button"
-                    variant="text"
-                    color="inherit"
-                  >
-                    Events
-                  </CustomButton>
-                </NavLink>
-              )}
-              {isAuth && (
-                <NavLink to="/bookings">
-                  <CustomButton
-                    size="small"
-                    type="button"
-                    variant="text"
-                    color="inherit"
-                  >
-                    Bookings
-                  </CustomButton>
-                </NavLink>
+                <React.Fragment>
+                  <NavLink to="/events">
+                    <CustomButton
+                      size="small"
+                      type="button"
+                      variant="contained"
+                      color="primary"
+                    >
+                      Events
+                    </CustomButton>
+                  </NavLink>
+
+                  <NavLink to="/bookings">
+                    <CustomButton
+                      size="small"
+                      type="button"
+                      variant="contained"
+                      color="primary"
+                    >
+                      Bookings
+                    </CustomButton>
+                  </NavLink>
+
+                  <NavLink to="/auth">
+                    <CustomButton
+                      onClick={logout}
+                      size="small"
+                      type="button"
+                      variant="contained"
+                      color="primary"
+                    >
+                      Logout
+                    </CustomButton>
+                  </NavLink>
+                </React.Fragment>
               )}
             </ul>
           </nav>

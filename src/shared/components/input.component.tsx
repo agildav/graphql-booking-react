@@ -3,21 +3,21 @@ import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 
 /** Custom props for this input */
-interface CustomInputProps {
+export interface CustomInputTextFieldProps {
   /** input id */
   id?: string;
   /** autocomplete of input */
   autoComplete?: "on" | "off";
   /** margin of input */
-  margin: "dense" | "none" | "normal";
+  margin?: "dense" | "none" | "normal";
   /** onChange event */
   onChange?: any;
   /** label associated with the input */
-  label: string;
+  label?: string;
   /** name of input */
   name?: string;
   /** type of input */
-  type: "email" | "password" | string | undefined;
+  type?: "email" | "password" | string;
 }
 
 const customStyles = makeStyles(theme => ({
@@ -27,7 +27,7 @@ const customStyles = makeStyles(theme => ({
   }
 }));
 
-export function CustomInputTextField(props: CustomInputProps) {
+export function CustomInputTextField(props: CustomInputTextFieldProps) {
   const classes = customStyles();
 
   return (

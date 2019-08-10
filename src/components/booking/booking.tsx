@@ -1,10 +1,12 @@
 import React from "react";
-import { IBookingProps, IBooking } from "./booking.model";
+import { IBookingProps, IBookingState } from "./booking.model";
 import { INavigation } from "../navigation/mainNavBar.model";
 
 /** Booking component */
-class Booking extends React.Component<IBookingProps, IBooking[]> {
-  initialState: IBooking[] = [{}];
+class Booking extends React.Component<IBookingProps, IBookingState> {
+  initialState: IBookingState = {
+    bookings: []
+  };
 
   constructor(props: IBookingProps) {
     super(props);
