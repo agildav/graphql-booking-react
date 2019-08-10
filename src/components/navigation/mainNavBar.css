@@ -1,40 +1,23 @@
 #MainNavBar {
-  align-items: center;
-  background: rgb(29, 78, 212);
-  display: flex;
-  height: 4.5rem;
-  left: 0;
-  padding: 0 1rem;
-  position: fixed;
-  top: 0;
   user-select: none;
   width: 100%;
 }
 
-.main-navbar-title h1 {
-  /* cursor: pointer; */
-  font-size: 1.5rem;
-  margin: 0;
-}
-
-.main-navbar-items {
-  margin-left: 1.5rem;
-  padding: 0;
-}
-
-.main-navbar-items ul {
-  display: flex;
-  padding: 0;
-  margin: 0;
-}
-
-.main-navbar-items a {
+#MainNavBar a {
   color: white;
-  margin: 0 1rem;
+  text-decoration: none;
 }
 
-.main-navbar-items a:hover,
-.main-navbar-items a:active,
-.main-navbar-items a.active {
-  color: rgb(251, 177, 92);
+#MainNavBar a:not(:last-child) {
+  margin: 0 0.5rem;
+}
+
+#MainNavBar a:last-child {
+  margin-left: 0.5rem;
+}
+
+.main-navbar-items a:hover button,
+.main-navbar-items a:active button,
+.main-navbar-items a.active button {
+  color: rgb(255, 197, 130);
 }
