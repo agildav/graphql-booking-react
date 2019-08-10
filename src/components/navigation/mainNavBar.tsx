@@ -94,6 +94,7 @@ export default function MainNavBar(props: IMainNavBarProps) {
                   </NavLink>
                 </React.Fragment>
               )}
+              {/* <button onClick={() => console.log(appState)}></button> */}
             </ul>
           </nav>
         </Toolbar>

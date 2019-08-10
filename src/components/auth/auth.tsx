@@ -118,9 +118,24 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
         throw new Error("An error occurred while signing up");
       }
 
-      toast.success("Welcome to gEvent!");
-      console.log(user.registerUser);
-      // Todo: login automatically
+      this.setState(
+        (state: IAuthState) => {
+          return {
+            userId: user.registerUser._id,
+            email: user.registerUser.email,
+            password: ""
+          };
+        },
+        async () => {
+          try {
+            await this.login(userInput);
+
+            return;
+          } catch (error) {
+            return;
+          }
+        }
+      );
 
       return;
     } catch (error) {
