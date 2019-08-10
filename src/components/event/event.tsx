@@ -40,6 +40,8 @@ class Event extends React.Component<IEventProps, IEventState> {
   }
 
   render() {
+    const isCreatingEvent: boolean = this.state.isCreatingEvent;
+
     return (
       <React.Fragment>
         <div id="EventsControlButton">
@@ -49,6 +51,7 @@ class Event extends React.Component<IEventProps, IEventState> {
             canCancel
             canConfirm
             openModalButton={{
+              disabled: isCreatingEvent,
               color: "primary",
               size: "large",
               variant: "contained",
@@ -103,7 +106,7 @@ class Event extends React.Component<IEventProps, IEventState> {
                   autoComplete="off"
                   // onChange={this.onEmailInputChange}
                   label="Description"
-                  type="textarea"
+                  type="text"
                   name="description"
                   id="event-description"
                   margin="normal"

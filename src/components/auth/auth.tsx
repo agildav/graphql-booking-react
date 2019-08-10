@@ -49,7 +49,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
     this.setState((state: IAuthState) => {
       return {
-        ...state,
         email: target.value
       };
     });
@@ -63,7 +62,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
     this.setState((state: IAuthState) => {
       return {
-        ...state,
         password: target.value
       };
     });
@@ -108,7 +106,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
         this.setState((state: IAuthState) => {
           return {
-            ...state,
             isHandlingAuth: false
           };
         });
@@ -124,9 +121,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
       toast.success("Welcome to gEvent!");
       console.log(user.registerUser);
       // Todo: login automatically
-      // await this.setState((state: IAuthState) => {
-      //   return this.initialState;
-      // });
 
       return;
     } catch (error) {
@@ -162,7 +156,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
         this.setState((state: IAuthState) => {
           return {
-            ...state,
             isHandlingAuth: false
           };
         });
@@ -177,18 +170,22 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
       toast.success("Welcome to gEvent!");
 
-      this.setState((state: IAuthState) => {
-        return {
-          userId: user.login.userId,
-          email: userInput.email,
-          password: "",
-          token: user.login.token,
-          tokenExpiration: user.login.tokenExpiration,
-          isHandlingAuth: false
-        };
-      });
-
-      this.props.authUser(this.state);
+      this.setState(
+        (state: IAuthState) => {
+          return {
+            userId: user.login.userId,
+            email: userInput.email,
+            password: "",
+            token: user.login.token,
+            tokenExpiration: user.login.tokenExpiration,
+            isHandlingAuth: false
+          };
+        },
+        () => {
+          this.props.authUser(this.state);
+          return;
+        }
+      );
 
       return;
     } catch (error) {
@@ -202,67 +199,69 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
   handleAuthUser = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
 
-    this.setState((state: IAuthState) => {
-      return {
-        ...state,
-        isHandlingAuth: true
-      };
-    });
-
-    const userInput: IAuthInput = {
-      email: this.state.email,
-      password: this.state.password
-    };
-
-    try {
-      const valid = this.isValidUserInput(userInput);
-
-      if (!valid) {
-        throw new Error("invalid user input");
-      }
-    } catch (error) {
-      await toast.error("Invalid credentials");
-
-      this.setState((state: IAuthState) => {
+    this.setState(
+      (state: IAuthState) => {
         return {
-          ...state,
-          isHandlingAuth: false
+          isHandlingAuth: true
         };
-      });
+      },
+      async () => {
+        const userInput: IAuthInput = {
+          email: this.state.email,
+          password: this.state.password
+        };
 
-      return;
-    }
+        try {
+          const valid = this.isValidUserInput(userInput);
 
-    // Choose between register | login
-    const { navigation } = this.props.appState;
-    if (navigation.isAtRegister || navigation.isAtLogin) {
-      try {
-        if (navigation.isAtRegister) {
-          await this.register(userInput);
-        } else {
-          await this.login(userInput);
+          if (!valid) {
+            throw new Error("invalid user input");
+          }
+        } catch (error) {
+          toast.error("Invalid credentials");
+
+          this.setState((state: IAuthState) => {
+            return {
+              isHandlingAuth: false
+            };
+          });
+
+          return;
         }
-      } catch (error) {
-        this.setState((state: IAuthState) => {
-          return {
-            ...state,
-            isHandlingAuth: false
-          };
-        });
+
+        // Choose between register | login
+        const { navigation } = this.props.appState;
+        if (navigation.isAtRegister || navigation.isAtLogin) {
+          try {
+            if (navigation.isAtRegister) {
+              await this.register(userInput);
+            } else {
+              await this.login(userInput);
+            }
+          } catch (error) {
+            this.setState((state: IAuthState) => {
+              return {
+                isHandlingAuth: false
+              };
+            });
+            return;
+          }
+        } else {
+          // Invalid route for this handler
+          toast.error("An error occurred");
+
+          this.setState((state: IAuthState) => {
+            return {
+              isHandlingAuth: false
+            };
+          });
+
+          return;
+        }
+
+        return;
       }
-    } else {
-      // Invalid route for this handler
-      await toast.error("An error occurred");
-
-      this.setState((state: IAuthState) => {
-        return {
-          ...state,
-          isHandlingAuth: false
-        };
-      });
-
-      return;
-    }
+    );
   };
 
   render() {

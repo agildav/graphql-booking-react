@@ -34,44 +34,86 @@ export interface CustomModalDialogProps {
   children: any;
 }
 
+/** Custom modal state */
+export interface CustomModalDialogState {
+  isOpenModal: boolean;
+}
+
 /** Custom modal dialog opened by a custom button */
-export function CustomModalDialog(props: CustomModalDialogProps) {
-  const [open, setOpen] = React.useState(false);
+export class CustomModalDialog extends React.Component<
+  CustomModalDialogProps,
+  CustomModalDialogState
+> {
+  initialState: CustomModalDialogState = {
+    isOpenModal: false
+  };
 
-  function handleClickOpen() {
-    setOpen(true);
+  constructor(props: CustomModalDialogProps) {
+    super(props);
+
+    this.state = this.initialState;
   }
 
-  function handleClose() {
-    setOpen(false);
-  }
+  handleClickOpen = () => {
+    this.setState((state: any) => {
+      return {
+        isOpenModal: true
+      };
+    });
+  };
 
-  return (
-    <div>
-      <CustomButton {...props.openModalButton} onClick={handleClickOpen}>
-        {props.openModalButton.title}
-      </CustomButton>
-      <Dialog
-        id={props.modalId}
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="form-dialog-title"
-      >
-        <DialogTitle id="form-dialog-title">{props.modalTitle}</DialogTitle>
-        <DialogContent>{props.children}</DialogContent>
-        <DialogActions>
-          {props.canCancel && (
-            <CustomButton {...props.cancelModalButton} onClick={handleClose}>
-              {props.cancelModalButton && props.cancelModalButton.title}
-            </CustomButton>
-          )}
-          {props.canConfirm && (
-            <CustomButton onClick={handleClose} {...props.confirmModalButton}>
-              {props.confirmModalButton && props.confirmModalButton.title}
-            </CustomButton>
-          )}
-        </DialogActions>
-      </Dialog>
-    </div>
-  );
+  handleClose = () => {
+    this.setState((state: any) => {
+      return {
+        isOpenModal: false
+      };
+    });
+  };
+
+  render() {
+    const isOpenModal: boolean = this.state.isOpenModal;
+
+    return (
+      <div>
+        <CustomButton
+          {...this.props.openModalButton}
+          onClick={this.handleClickOpen}
+          disabled={isOpenModal}
+        >
+          {this.props.openModalButton.title}
+        </CustomButton>
+        <Dialog
+          id={this.props.modalId}
+          open={isOpenModal}
+          onClose={this.handleClose}
+          aria-labelledby="form-dialog-title"
+        >
+          <DialogTitle id="form-dialog-title">
+            {this.props.modalTitle}
+          </DialogTitle>
+          <DialogContent>{this.props.children}</DialogContent>
+          <DialogActions>
+            {this.props.canCancel && (
+              <CustomButton
+                {...this.props.cancelModalButton}
+                onClick={this.handleClose}
+              >
+                {this.props.cancelModalButton &&
+                  this.props.cancelModalButton.title}
+              </CustomButton>
+            )}
+            {this.props.canConfirm && (
+              <CustomButton
+                onClick={this.handleClose}
+                {...this.props.confirmModalButton}
+              >
+                {this.props.confirmModalButton &&
+                  this.props.confirmModalButton.title}
+              </CustomButton>
+            )}
+          </DialogActions>
+        </Dialog>
+      </div>
+    );
+  }
 }

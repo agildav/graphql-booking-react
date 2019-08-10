@@ -44,7 +44,6 @@ class App extends React.Component<{}, IAppState> {
   switchAuthModeChange = () => {
     this.setState((state: IAppState) => {
       return {
-        ...state,
         navigation: {
           ...state.navigation,
           isAtLogin: !state.navigation.isAtLogin,
@@ -58,7 +57,6 @@ class App extends React.Component<{}, IAppState> {
   authUser = (auth: IAuthState) => {
     this.setState((state: IAppState) => {
       return {
-        ...state,
         navigation: {
           ...state.navigation,
           isAtLogin: false,
@@ -77,7 +75,6 @@ class App extends React.Component<{}, IAppState> {
   updateNavigation = (navigation: INavigationState) => {
     this.setState((state: IAppState) => {
       return {
-        ...state,
         navigation
       };
     });
