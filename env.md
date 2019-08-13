@@ -3,6 +3,7 @@
 Enviroment variables file
 
 ## Content
+All variables must start with `REACT_APP_`
 
 The .env file located at the root of the project must have:
 

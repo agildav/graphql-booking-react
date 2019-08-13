@@ -10,15 +10,31 @@ export default class FetchService {
     ? process.env.REACT_APP_API_BASE_URL
     : "";
 
-  /** fetchServer sends a POST request to the server with the given request body */
-  static async fetchServer(reqBody: Object): Promise<IResponse> {
+  /** fetchServer sends a POST request to the server with the given request body and token (if needed) */
+  static async fetchServer(
+    reqBody: Object,
+    token?: string
+  ): Promise<IResponse> {
+    let headers = {
+      "Content-Type": "application/json",
+      Authorization: ""
+    };
+
     try {
+      if (token) {
+        if (token.length < 1) {
+          throw new Error("token received is invalid");
+        } else {
+          headers.Authorization = "Bearer " + token;
+        }
+      } else {
+        delete headers.Authorization;
+      }
+
       const res = await fetch(FetchService.SERVER_URL, {
         method: "POST",
         body: JSON.stringify(reqBody),
-        headers: {
-          "Content-Type": "application/json"
-        }
+        headers
       });
 
       const response: IResponse = await res.json();

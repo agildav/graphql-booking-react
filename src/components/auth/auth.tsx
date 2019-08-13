@@ -97,13 +97,11 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
       if (response.errors) {
         toast.error("That email is already registered!");
 
-        this.setState((state: IAuthState) => {
+        return this.setState((state: IAuthState) => {
           return {
             isHandlingAuth: false
           };
         });
-
-        return;
       }
 
       const user: { registerUser: IUser } = response.data;
@@ -111,7 +109,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
         throw new Error("An error occurred while signing up");
       }
 
-      this.setState(
+      return this.setState(
         (state: IAuthState) => {
           return {
             userId: user.registerUser._id,
@@ -129,8 +127,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
           }
         }
       );
-
-      return;
     } catch (error) {
       toast.error("Sorry, could not register");
 
@@ -151,7 +147,8 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     const requestBody = {
       query: `
           query {
-            login(authInput: {email: "${userInput.email}", password: "${userInput.password}"}) ${wantedFields}
+            login(authInput: {email: "${userInput.email}", password: "${userInput.password}"})
+            ${wantedFields}
           }
           `
     };
@@ -162,13 +159,11 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
       if (response.errors) {
         toast.error("Invalid credentials");
 
-        this.setState((state: IAuthState) => {
+        return this.setState((state: IAuthState) => {
           return {
             isHandlingAuth: false
           };
         });
-
-        return;
       }
 
       const user: { login: IAuth } = response.data;
@@ -178,7 +173,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
       toast.success("Welcome to gEvent!");
 
-      this.setState(
+      return this.setState(
         (state: IAuthState) => {
           return {
             userId: user.login.userId,
@@ -194,8 +189,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
           return;
         }
       );
-
-      return;
     } catch (error) {
       toast.error("Sorry, could not login");
 
@@ -207,7 +200,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
   handleAuthUser = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
 
-    this.setState(
+    return this.setState(
       (state: IAuthState) => {
         return {
           isHandlingAuth: true
@@ -229,13 +222,11 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
         } catch (error) {
           toast.error("Invalid credentials");
 
-          this.setState((state: IAuthState) => {
+          return this.setState((state: IAuthState) => {
             return {
               isHandlingAuth: false
             };
           });
-
-          return;
         }
 
         // Choose between register | login
@@ -244,31 +235,28 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
           try {
             if (navigation.isAtRegister) {
               await this.register(userInput);
+              return;
             } else {
               await this.login(userInput);
+              return;
             }
           } catch (error) {
-            this.setState((state: IAuthState) => {
+            return this.setState((state: IAuthState) => {
               return {
                 isHandlingAuth: false
               };
             });
-            return;
           }
         } else {
           // Invalid route for this handler
           toast.error("An error occurred");
 
-          this.setState((state: IAuthState) => {
+          return this.setState((state: IAuthState) => {
             return {
               isHandlingAuth: false
             };
           });
-
-          return;
         }
-
-        return;
       }
     );
   };

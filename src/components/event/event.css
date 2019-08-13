@@ -9,7 +9,6 @@
 
 /* Main modal */
 #create-event-modal .MuiPaper-root {
-  min-height: 25rem;
   width: 30rem;
 }
 
