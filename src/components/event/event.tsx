@@ -23,8 +23,26 @@ class Event extends React.Component<IEventProps, IEventState> {
       price: 0,
       title: ""
     },
-    isOpenModal: false,
+    selectedEventForBooking: {
+      _id: "",
+      createdAt: "",
+      creator: {
+        _id: "",
+        createdAt: "",
+        createdEvents: [],
+        email: "",
+        password: "",
+        username: ""
+      },
+      date: "",
+      description: "",
+      price: 0,
+      title: ""
+    },
+    isOpenEventCreationModal: false,
+    isOpenEventBookingModal: false,
     isCreatingEvent: false,
+    isBookingEvent: false,
     isFetchingEvents: false
   };
 
@@ -70,6 +88,8 @@ class Event extends React.Component<IEventProps, IEventState> {
         title
         price
         date
+        createdAt
+        description
         creator {
           _id
         }
@@ -201,6 +221,8 @@ class Event extends React.Component<IEventProps, IEventState> {
       title
       price
       date
+      createdAt
+      description
       creator {
         _id
       }
@@ -245,7 +267,7 @@ class Event extends React.Component<IEventProps, IEventState> {
         return {
           events: updatedEvents,
           isCreatingEvent: false,
-          isOpenModal: false,
+          isOpenEventCreationModal: false,
           createEventInput: {
             date: new Date().toISOString(),
             description: "",
@@ -308,21 +330,23 @@ class Event extends React.Component<IEventProps, IEventState> {
     );
   };
 
-  /** opens the modal */
+  /** opens the create event modal */
   openCreateEventModal = () => {
     return this.setState((state: IEventState) => {
       return {
-        isOpenModal: true
+        isOpenEventCreationModal: true
       };
     });
   };
 
-  /** handles the on close and cancel events */
-  closeCreateEventModal = () => {
+  /** handles the on close and cancel events of all modals */
+  closeEventModal = () => {
     return this.setState((state: IEventState) => {
       return {
         isCreatingEvent: false,
-        isOpenModal: false,
+        isBookingEvent: false,
+        isOpenEventCreationModal: false,
+        isOpenEventBookingModal: false,
         createEventInput: {
           date: new Date().toISOString(),
           description: "",
@@ -333,15 +357,38 @@ class Event extends React.Component<IEventProps, IEventState> {
     });
   };
 
+  /** opens the booking modal */
+  openBookEventModal = (eventId: string) => {
+    const selectedEvent = this.state.events.find(e => e._id === eventId);
+
+    if (selectedEvent) {
+      return this.setState((state: IEventState) => {
+        return {
+          isOpenEventBookingModal: true,
+          selectedEventForBooking: selectedEvent
+        };
+      });
+    } else {
+      toast.error("Sorry, an error occurred fetching event details");
+      return;
+    }
+  };
+
+  /** books an event */
+  handleEventBooking = () => {
+    console.log("todo: book event");
+  };
+
   render() {
     const showEventsTransition: number = 1000;
 
     return (
       <div id="Events">
+        {/* Event creation */}
         <div id="EventCreationButton">
           <CustomModalDialog
-            isOpenModal={this.state.isOpenModal}
-            onCloseModal={this.closeCreateEventModal}
+            isOpenModal={this.state.isOpenEventCreationModal}
+            onCloseModal={this.closeEventModal}
             modalId="create-event-modal"
             modalTitle="Event creation"
             canCancel
@@ -360,7 +407,7 @@ class Event extends React.Component<IEventProps, IEventState> {
               variant: "text",
               type: "button",
               title: "Cancel",
-              onClick: this.closeCreateEventModal
+              onClick: this.closeEventModal
             }}
             confirmModalButton={{
               color: "primary",
@@ -427,6 +474,8 @@ class Event extends React.Component<IEventProps, IEventState> {
             </div>
           </CustomModalDialog>
         </div>
+
+        {/* Events list */}
         {this.state.isFetchingEvents ? (
           <div className="eventsSpinner">
             <CustomSpinner variant="indeterminate" />
@@ -440,6 +489,14 @@ class Event extends React.Component<IEventProps, IEventState> {
               <EventList
                 events={this.state.events}
                 appState={this.props.appState}
+                eventBookings={{
+                  closeEventModal: this.closeEventModal,
+                  handleEventBooking: this.handleEventBooking,
+                  isBookingEvent: this.state.isBookingEvent,
+                  isOpenEventBookingModal: this.state.isOpenEventBookingModal,
+                  openBookEventModal: this.openBookEventModal,
+                  selectedEventForBooking: this.state.selectedEventForBooking
+                }}
               />
             </main>
           </Fade>

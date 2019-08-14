@@ -26,7 +26,10 @@ export interface IEvent extends IEventInput {
 export interface IEventState {
   events: IEvent[];
   createEventInput: IEventInput;
-  isOpenModal: boolean;
+  isOpenEventCreationModal: boolean;
+  isOpenEventBookingModal: boolean;
   isCreatingEvent: boolean;
+  isBookingEvent: boolean;
   isFetchingEvents: boolean;
+  selectedEventForBooking: IEvent;
 }

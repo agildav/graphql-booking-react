@@ -1,5 +1,18 @@
 @import "shared/styles/colors";
 
+.event-list-item,
+.book-event-section {
+  h6 {
+    font-size: 1rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  span {
+    font-size: 0.6rem;
+  }
+}
+
 .event-list-item {
   align-items: center;
   border: 1px $border-box-color solid;
@@ -8,29 +21,38 @@
   margin: 1rem;
   padding: 1rem;
 
-  h6 {
-    font-size: 1rem;
-  }
-  span {
-    font-size: 0.6rem;
-  }
-
   .event-slim-info {
     text-align: left;
     width: 60%;
-
-    h6 {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-
-    // .slim-wrapper {
-    // }
   }
 
   .event-details {
     text-align: right;
     width: 40%;
+  }
+}
+
+#book-event-modal .MuiPaper-root {
+  width: 30rem;
+  .book-event-section {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    div,
+    h6,
+    span {
+      width: 100%;
+      width: -moz-available;
+      width: -webkit-fill-available;
+      width: stretch;
+    }
+
+    h6,
+    span {
+      overflow: visible;
+      white-space: normal;
+    }
   }
 }

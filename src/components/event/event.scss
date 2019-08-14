@@ -23,12 +23,12 @@
   /* Modal content */
   .create-event-form {
     width: 100%;
-  }
 
-  .create-event-form .form-control div {
-    width: 100%;
-    width: -moz-available;
-    width: -webkit-fill-available;
-    width: stretch;
+    .form-control div {
+      width: 100%;
+      width: -moz-available;
+      width: -webkit-fill-available;
+      width: stretch;
+    }
   }
 }

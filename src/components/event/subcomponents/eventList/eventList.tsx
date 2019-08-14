@@ -6,7 +6,18 @@ import { IAppState } from "../../../../app/App.model";
 import "./eventList.scss";
 
 /** events wrapper */
-export const EventList = (props: { events: IEvent[]; appState: IAppState }) => {
+export const EventList = (props: {
+  events: IEvent[];
+  appState: IAppState;
+  eventBookings: {
+    isOpenEventBookingModal: boolean;
+    closeEventModal: Function;
+    openBookEventModal: Function;
+    isBookingEvent: boolean;
+    handleEventBooking: Function;
+    selectedEventForBooking: IEvent;
+  };
+}) => {
   const events = props.events;
 
   return (
@@ -18,6 +29,7 @@ export const EventList = (props: { events: IEvent[]; appState: IAppState }) => {
               key={event._id}
               event={event}
               appState={props.appState}
+              eventBooking={props.eventBookings}
             />
           );
         })}
