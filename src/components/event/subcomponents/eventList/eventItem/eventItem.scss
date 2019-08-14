@@ -1,0 +1,19 @@
+@import "shared/styles/colors";
+
+.event-list-item {
+  align-items: center;
+  border: 1px $border-box-color solid;
+  border-radius: 1rem;
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem;
+  padding: 1rem;
+
+  .event-slim-info {
+    text-align: left;
+  }
+
+  .event-details {
+    text-align: right;
+  }
+}

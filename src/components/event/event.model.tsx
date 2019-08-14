@@ -17,9 +17,9 @@ export interface IEventInput {
 
 /** Event model */
 export interface IEvent extends IEventInput {
-  _id: any;
+  _id: string;
   createdAt: string;
-  creator: IUser | string;
+  creator: IUser;
 }
 
 /** Event state */

@@ -9,7 +9,8 @@ import { toast } from "react-toastify";
 import Fade from "@material-ui/core/Fade";
 import FetchService from "../../shared/fetch.service";
 
-import "./event.css";
+import "./event.scss";
+import { EventList } from "./subcomponents/eventList/eventList";
 
 /** Event component */
 class Event extends React.Component<IEventProps, IEventState> {
@@ -39,7 +40,6 @@ class Event extends React.Component<IEventProps, IEventState> {
     });
   };
 
-  /** updates navigation and finds events */
   componentDidMount() {
     const currentNavigation: INavigationState = {
       isAtBookings: false,
@@ -50,68 +50,67 @@ class Event extends React.Component<IEventProps, IEventState> {
     };
 
     this.props.updateNavigation(currentNavigation);
+
+    return this.fetchEvents();
+  }
+
+  /** finds all the events */
+  fetchEvents = () => {
     this.setState(
       (state: IEventState) => {
         return {
           isFetchingEvents: true
         };
       },
-      () => {
-        this.fetchEvents().finally(() =>
-          this.setState((state: IEventState) => {
+      async () => {
+        const wantedFields = `
+      {
+        _id
+        title
+        price
+        date
+        creator {
+          _id
+        }
+      }
+      `;
+
+        const requestBody = {
+          query: `
+        query {
+          events ${wantedFields}
+        }
+        `
+        };
+
+        try {
+          const token = this.props.appState.auth.token;
+          const response = await FetchService.fetchServer(requestBody, token);
+
+          if (response.errors) {
+            toast.error("An error occured fetching events");
+
+            return;
+          }
+
+          const eventsObj: { events: IEvent[] } = response.data;
+          if (!eventsObj) {
+            throw new Error("An error occurred while fetching events");
+          }
+
+          return this.setState((state: IEventState) => {
             return {
-              isFetchingEvents: false
+              isFetchingEvents: false,
+              events: eventsObj.events
             };
-          })
-        );
+          });
+        } catch (error) {
+          toast.error("Sorry, could not fetch events");
+
+          return error;
+        }
       }
     );
-  }
-
-  /** finds all the events */
-  fetchEvents = async () => {
-    const wantedFields = `
-    {
-      _id
-      title
-      price
-      date
-    }
-    `;
-
-    const requestBody = {
-      query: `
-      query {
-        events ${wantedFields}
-      }
-      `
-    };
-
-    try {
-      const token = this.props.appState.auth.token;
-      const response = await FetchService.fetchServer(requestBody, token);
-
-      if (response.errors) {
-        toast.error("An error occured fetching events");
-
-        return;
-      }
-
-      const eventsObj: { events: IEvent[] } = response.data;
-      if (!eventsObj) {
-        throw new Error("An error occurred while fetching events");
-      }
-
-      return this.setState((state: IEventState) => {
-        return {
-          events: eventsObj.events
-        };
-      });
-    } catch (error) {
-      toast.error("Sorry, could not fetch events");
-
-      return error;
-    }
   };
 
   /** updates the event input */
@@ -311,7 +310,7 @@ class Event extends React.Component<IEventProps, IEventState> {
 
     return (
       <React.Fragment>
-        <div id="EventsControlButton">
+        <div id="EventCreationButton">
           <CustomModalDialog
             isOpenModal={this.state.isOpenModal}
             onCloseModal={this.closeCreateEventModal}
@@ -348,7 +347,7 @@ class Event extends React.Component<IEventProps, IEventState> {
             <div className="create-event-form">
               <div className="form-control">
                 <CustomInputTextField
-                  maxLength={140}
+                  maxLength={40}
                   autoComplete="off"
                   onChange={this.onTitleInputChange}
                   label="Name"
@@ -361,7 +360,6 @@ class Event extends React.Component<IEventProps, IEventState> {
               </div>
               <div className="form-control">
                 <CustomInputTextField
-                  maxLength={140}
                   autoComplete="off"
                   onChange={this.onPriceInputChange}
                   label="Price"
@@ -403,15 +401,10 @@ class Event extends React.Component<IEventProps, IEventState> {
         </div>
         <Fade timeout={showEventsTransition} in={!this.state.isFetchingEvents}>
           <main id="EventsList">
-            <ul className="event-list">
-              {this.state.events.map(event => {
-                return (
-                  <li className={`event-list-item`} key={event._id}>
-                    {event.title}
-                  </li>
-                );
-              })}
-            </ul>
+            <EventList
+              events={this.state.events}
+              appState={this.props.appState}
+            />
           </main>
         </Fade>
       </React.Fragment>

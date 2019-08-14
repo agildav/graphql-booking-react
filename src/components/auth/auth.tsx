@@ -7,7 +7,7 @@ import { IAuthProps, IAuth, IAuthInput, IAuthState } from "./auth.model";
 import { toast } from "react-toastify";
 import { IAppState } from "../../app/App.model";
 import { HTMLElementEvent } from "../../shared/adapter.model";
-import "./auth.css";
+import "./auth.scss";
 
 /** Authentication component */
 class Auth extends React.Component<IAuthProps, IAuthState> {

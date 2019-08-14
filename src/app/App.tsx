@@ -6,7 +6,7 @@ import { INavigationState } from "../components/navigation/mainNavBar.model";
 import { BrowserRouter } from "react-router-dom";
 import Router from "./Router";
 
-import "./App.css";
+import "./App.scss";
 
 /** Application's root component */
 class App extends React.Component<{}, IAppState> {
