@@ -5,15 +5,32 @@
   border: 1px $border-box-color solid;
   border-radius: 1rem;
   display: flex;
-  justify-content: space-between;
   margin: 1rem;
   padding: 1rem;
 
+  h6 {
+    font-size: 1rem;
+  }
+  span {
+    font-size: 0.6rem;
+  }
+
   .event-slim-info {
     text-align: left;
+    width: 60%;
+
+    h6 {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    // .slim-wrapper {
+    // }
   }
 
   .event-details {
     text-align: right;
+    width: 40%;
   }
 }

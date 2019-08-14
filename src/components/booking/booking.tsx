@@ -27,7 +27,11 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
   }
 
   render() {
-    return <h1>Booking page</h1>;
+    return (
+      <div>
+        <h1>Booking page</h1>
+      </div>
+    );
   }
 }
 

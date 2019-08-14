@@ -1,12 +1,19 @@
 @import "shared/styles/colors";
 
-#EventCreationButton {
-  border: 1px solid $border-box-color;
-  border-radius: 0.5rem;
-  margin: 0 auto;
-  max-width: 50%;
-  padding: 1rem;
-  width: 30rem;
+#Events {
+  #EventCreationButton {
+    border: 1px solid $border-box-color;
+    border-radius: 0.5rem;
+    margin: 0 auto;
+    max-width: 50%;
+    padding: 1rem;
+    width: 30rem;
+  }
+
+  .eventsSpinner,
+  .eventsList {
+    margin-top: 1rem;
+  }
 }
 
 /* Main modal */
@@ -24,9 +31,4 @@
     width: -webkit-fill-available;
     width: stretch;
   }
-}
-
-/** Events list */
-#EventsList {
-  margin-top: 1rem;
 }

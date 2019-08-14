@@ -8,9 +8,10 @@ import { CustomDateTimePicker } from "../../shared/components/date-time-picker.c
 import { toast } from "react-toastify";
 import Fade from "@material-ui/core/Fade";
 import FetchService from "../../shared/fetch.service";
+import { EventList } from "./subcomponents/eventList/eventList";
+import { CustomSpinner } from "../../shared/components/spinner.component";
 
 import "./event.scss";
-import { EventList } from "./subcomponents/eventList/eventList";
 
 /** Event component */
 class Event extends React.Component<IEventProps, IEventState> {
@@ -94,6 +95,7 @@ class Event extends React.Component<IEventProps, IEventState> {
           }
 
           const eventsObj: { events: IEvent[] } = response.data;
+
           if (!eventsObj) {
             throw new Error("An error occurred while fetching events");
           }
@@ -107,7 +109,11 @@ class Event extends React.Component<IEventProps, IEventState> {
         } catch (error) {
           toast.error("Sorry, could not fetch events");
 
-          return error;
+          return this.setState((state: IEventState) => {
+            return {
+              isFetchingEvents: false
+            };
+          });
         }
       }
     );
@@ -192,6 +198,12 @@ class Event extends React.Component<IEventProps, IEventState> {
     const wantedFields = `
     {
       _id
+      title
+      price
+      date
+      creator {
+        _id
+      }
     }
     `;
 
@@ -225,7 +237,23 @@ class Event extends React.Component<IEventProps, IEventState> {
 
       toast.success("Event created!");
 
-      return this.closeCreateEventModal();
+      return this.setState((state: IEventState) => {
+        const updatedEvents = [...state.events];
+
+        updatedEvents.push(event.createEvent);
+
+        return {
+          events: updatedEvents,
+          isCreatingEvent: false,
+          isOpenModal: false,
+          createEventInput: {
+            date: new Date().toISOString(),
+            description: "",
+            price: 0,
+            title: ""
+          }
+        };
+      });
     } catch (error) {
       toast.error("Sorry, could not create event");
 
@@ -309,7 +337,7 @@ class Event extends React.Component<IEventProps, IEventState> {
     const showEventsTransition: number = 1000;
 
     return (
-      <React.Fragment>
+      <div id="Events">
         <div id="EventCreationButton">
           <CustomModalDialog
             isOpenModal={this.state.isOpenModal}
@@ -399,15 +427,24 @@ class Event extends React.Component<IEventProps, IEventState> {
             </div>
           </CustomModalDialog>
         </div>
-        <Fade timeout={showEventsTransition} in={!this.state.isFetchingEvents}>
-          <main id="EventsList">
-            <EventList
-              events={this.state.events}
-              appState={this.props.appState}
-            />
-          </main>
-        </Fade>
-      </React.Fragment>
+        {this.state.isFetchingEvents ? (
+          <div className="eventsSpinner">
+            <CustomSpinner variant="indeterminate" />
+          </div>
+        ) : (
+          <Fade
+            timeout={showEventsTransition}
+            in={!this.state.isFetchingEvents}
+          >
+            <main className="eventsList">
+              <EventList
+                events={this.state.events}
+                appState={this.props.appState}
+              />
+            </main>
+          </Fade>
+        )}
+      </div>
     );
   }
 }
