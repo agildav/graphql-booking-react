@@ -6,6 +6,7 @@ import { CustomInputTextField } from "../../shared/components/input.component";
 import { HTMLElementEvent } from "../../shared/adapter.model";
 import { CustomDateTimePicker } from "../../shared/components/date-time-picker.component";
 import { toast } from "react-toastify";
+import Fade from "@material-ui/core/Fade";
 import FetchService from "../../shared/fetch.service";
 
 import "./event.css";
@@ -21,7 +22,8 @@ class Event extends React.Component<IEventProps, IEventState> {
       title: ""
     },
     isOpenModal: false,
-    isCreatingEvent: false
+    isCreatingEvent: false,
+    isFetchingEvents: false
   };
 
   constructor(props: IEventProps) {
@@ -37,6 +39,7 @@ class Event extends React.Component<IEventProps, IEventState> {
     });
   };
 
+  /** updates navigation and finds events */
   componentDidMount() {
     const currentNavigation: INavigationState = {
       isAtBookings: false,
@@ -47,8 +50,71 @@ class Event extends React.Component<IEventProps, IEventState> {
     };
 
     this.props.updateNavigation(currentNavigation);
+    this.setState(
+      (state: IEventState) => {
+        return {
+          isFetchingEvents: true
+        };
+      },
+      () => {
+        this.fetchEvents().finally(() =>
+          this.setState((state: IEventState) => {
+            return {
+              isFetchingEvents: false
+            };
+          })
+        );
+      }
+    );
   }
 
+  /** finds all the events */
+  fetchEvents = async () => {
+    const wantedFields = `
+    {
+      _id
+      title
+      price
+      date
+    }
+    `;
+
+    const requestBody = {
+      query: `
+      query {
+        events ${wantedFields}
+      }
+      `
+    };
+
+    try {
+      const token = this.props.appState.auth.token;
+      const response = await FetchService.fetchServer(requestBody, token);
+
+      if (response.errors) {
+        toast.error("An error occured fetching events");
+
+        return;
+      }
+
+      const eventsObj: { events: IEvent[] } = response.data;
+      if (!eventsObj) {
+        throw new Error("An error occurred while fetching events");
+      }
+
+      return this.setState((state: IEventState) => {
+        return {
+          events: eventsObj.events
+        };
+      });
+    } catch (error) {
+      toast.error("Sorry, could not fetch events");
+
+      return error;
+    }
+  };
+
+  /** updates the event input */
   onTitleInputChange = (event: SyntheticEvent) => {
     event.persist();
 
@@ -64,6 +130,7 @@ class Event extends React.Component<IEventProps, IEventState> {
     });
   };
 
+  /** updates the event input */
   onPriceInputChange = (event: SyntheticEvent) => {
     event.persist();
 
@@ -79,6 +146,7 @@ class Event extends React.Component<IEventProps, IEventState> {
     });
   };
 
+  /** updates the event input */
   onDescriptionInputChange = (event: SyntheticEvent) => {
     event.persist();
 
@@ -239,97 +307,114 @@ class Event extends React.Component<IEventProps, IEventState> {
   };
 
   render() {
+    const showEventsTransition: number = 1000;
+
     return (
-      <div id="EventsControlButton">
-        <CustomModalDialog
-          isOpenModal={this.state.isOpenModal}
-          onCloseModal={this.closeCreateEventModal}
-          modalId="create-event-modal"
-          modalTitle="Event creation"
-          canCancel
-          canConfirm
-          openModalButton={{
-            color: "primary",
-            size: "large",
-            variant: "contained",
-            type: "button",
-            title: "Create event",
-            onClick: this.openCreateEventModal
-          }}
-          cancelModalButton={{
-            color: "primary",
-            size: "large",
-            variant: "text",
-            type: "button",
-            title: "Cancel",
-            onClick: this.closeCreateEventModal
-          }}
-          confirmModalButton={{
-            color: "primary",
-            size: "large",
-            variant: "text",
-            type: "button",
-            title: "Create",
-            disabled: this.state.isCreatingEvent,
-            onClick: this.handleEventCreation
-          }}
-        >
-          <div className="create-event-form">
-            <div className="form-control">
-              <CustomInputTextField
-                maxLength={140}
-                autoComplete="off"
-                onChange={this.onTitleInputChange}
-                label="Name"
-                type="text"
-                name="name"
-                id="event-name"
-                margin="normal"
-                variant="outlined"
-              />
-            </div>
-            <div className="form-control">
-              <CustomInputTextField
-                maxLength={140}
-                autoComplete="off"
-                onChange={this.onPriceInputChange}
-                label="Price"
-                type="number"
-                name="price"
-                id="event-price"
-                margin="normal"
-                variant="outlined"
-              />
-            </div>
+      <React.Fragment>
+        <div id="EventsControlButton">
+          <CustomModalDialog
+            isOpenModal={this.state.isOpenModal}
+            onCloseModal={this.closeCreateEventModal}
+            modalId="create-event-modal"
+            modalTitle="Event creation"
+            canCancel
+            canConfirm
+            openModalButton={{
+              color: "primary",
+              size: "large",
+              variant: "contained",
+              type: "button",
+              title: "Create event",
+              onClick: this.openCreateEventModal
+            }}
+            cancelModalButton={{
+              color: "primary",
+              size: "large",
+              variant: "text",
+              type: "button",
+              title: "Cancel",
+              onClick: this.closeCreateEventModal
+            }}
+            confirmModalButton={{
+              color: "primary",
+              size: "large",
+              variant: "text",
+              type: "button",
+              title: "Create",
+              disabled: this.state.isCreatingEvent,
+              onClick: this.handleEventCreation
+            }}
+          >
+            <div className="create-event-form">
+              <div className="form-control">
+                <CustomInputTextField
+                  maxLength={140}
+                  autoComplete="off"
+                  onChange={this.onTitleInputChange}
+                  label="Name"
+                  type="text"
+                  name="name"
+                  id="event-name"
+                  margin="normal"
+                  variant="outlined"
+                />
+              </div>
+              <div className="form-control">
+                <CustomInputTextField
+                  maxLength={140}
+                  autoComplete="off"
+                  onChange={this.onPriceInputChange}
+                  label="Price"
+                  type="number"
+                  name="price"
+                  id="event-price"
+                  margin="normal"
+                  variant="outlined"
+                />
+              </div>
 
-            <div className="form-control">
-              <CustomDateTimePicker
-                value={this.state.createEventInput.date}
-                margin="normal"
-                label="Date"
-                inputVariant="outlined"
-                onChange={this.onDateInputChange}
-              />
-            </div>
+              <div className="form-control">
+                <CustomDateTimePicker
+                  value={this.state.createEventInput.date}
+                  margin="normal"
+                  label="Date"
+                  inputVariant="outlined"
+                  onChange={this.onDateInputChange}
+                />
+              </div>
 
-            <div className="form-control">
-              <CustomInputTextField
-                maxLength={140}
-                autoComplete="off"
-                onChange={this.onDescriptionInputChange}
-                label="Description"
-                type="text"
-                name="description"
-                id="event-description"
-                margin="normal"
-                variant="outlined"
-                multiline
-                rows={1}
-              />
+              <div className="form-control">
+                <CustomInputTextField
+                  maxLength={140}
+                  autoComplete="off"
+                  onChange={this.onDescriptionInputChange}
+                  label="Description"
+                  type="text"
+                  name="description"
+                  id="event-description"
+                  margin="normal"
+                  variant="outlined"
+                  multiline
+                  rows={1}
+                />
+              </div>
             </div>
-          </div>
-        </CustomModalDialog>
-      </div>
+          </CustomModalDialog>
+        </div>
+        <Fade timeout={showEventsTransition} in={!this.state.isFetchingEvents}>
+          <main id="EventsList">
+            <ul className="event-list">
+              {this.state.events.map(event => {
+                return (
+                  <li className={`event-list-item`} key={event._id}>
+                    {event.title}
+                  </li>
+                );
+              })}
+            </ul>
+          </main>
+        </Fade>
+      </React.Fragment>
     );
   }
 }

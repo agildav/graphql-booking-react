@@ -1,6 +1,8 @@
+/** Events creation modal */
+
 /* Button that opens the modal */
 #EventsControlButton {
-  border: 1px solid rgba(139, 153, 235, 0.301);
+  border: 1px solid rgba(139, 153, 235, 0.109);
   margin: 0 auto;
   max-width: 50%;
   padding: 1rem;
@@ -22,4 +24,9 @@
   width: -moz-available;
   width: -webkit-fill-available;
   width: stretch;
+}
+
+/** Events list */
+#EventsList {
+  margin-top: 1rem;
 }

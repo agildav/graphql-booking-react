@@ -28,4 +28,5 @@ export interface IEventState {
   createEventInput: IEventInput;
   isOpenModal: boolean;
   isCreatingEvent: boolean;
+  isFetchingEvents: boolean;
 }
