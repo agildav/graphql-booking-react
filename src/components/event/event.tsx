@@ -12,6 +12,7 @@ import { EventList } from "./subcomponents/eventList/eventList";
 import { CustomSpinner } from "../../shared/components/spinner.component";
 
 import "./event.scss";
+import { IBooking } from "../booking/booking.model";
 
 /** Event component */
 class Event extends React.Component<IEventProps, IEventState> {
@@ -376,7 +377,66 @@ class Event extends React.Component<IEventProps, IEventState> {
 
   /** books an event */
   handleEventBooking = () => {
-    console.log("todo: book event");
+    this.setState(
+      (state: IEventState) => {
+        return {
+          isBookingEvent: true
+        };
+      },
+      async () => {
+        const wantedFields = `
+        {
+          _id
+        }
+        `;
+
+        const requestBody = {
+          query: `
+          mutation {
+            bookEvent(eventId: "${this.state.selectedEventForBooking._id}")
+            ${wantedFields}
+          }
+          `
+        };
+
+        try {
+          const token = this.props.appState.auth.token;
+          const response = await FetchService.fetchServer(requestBody, token);
+
+          if (response.errors) {
+            toast.error("An error occured");
+
+            return this.setState((state: IEventState) => {
+              return {
+                isBookingEvent: false
+              };
+            });
+          }
+
+          const booking: { bookEvent: IBooking } = response.data;
+          if (!booking) {
+            throw new Error("An error occurred while booking event");
+          }
+
+          toast.success("Event booking done!");
+
+          return this.setState((state: IEventState) => {
+            return {
+              isOpenEventBookingModal: false,
+              isBookingEvent: false
+            };
+          });
+        } catch (error) {
+          toast.error("Sorry, could not book event");
+
+          this.setState((state: IEventState) => {
+            return {
+              isBookingEvent: false
+            };
+          });
+        }
+      }
+    );
   };
 
   render() {
