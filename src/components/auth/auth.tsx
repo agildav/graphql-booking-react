@@ -185,6 +185,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
           };
         },
         () => {
+          this.saveAuthTokenInSession(this.state.token);
           this.props.authUser(this.state);
           return;
         }
@@ -194,6 +195,10 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
 
       throw error;
     }
+  };
+
+  saveAuthTokenInSession = (token: string) => {
+    window.sessionStorage.setItem("token", token);
   };
 
   /** register or sign in user */
