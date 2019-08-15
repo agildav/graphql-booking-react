@@ -71,7 +71,7 @@ class Event extends React.Component<IEventProps, IEventState> {
 
     this.props.updateNavigation(currentNavigation);
 
-    // return this.fetchEvents();
+    return this.fetchEvents();
   }
 
   /** finds all the events */

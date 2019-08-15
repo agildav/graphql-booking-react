@@ -5,14 +5,17 @@ import FetchService from "../../shared/fetch.service";
 import { toast } from "react-toastify";
 import { CustomSpinner } from "../../shared/components/spinner.component";
 import { Fade, Typography } from "@material-ui/core";
+import { BookingList } from "./subcomponents/bookingList";
 
 import "./booking.scss";
+import { IEvent } from "../event/event.model";
 
 /** Booking component */
 class Booking extends React.Component<IBookingProps, IBookingState> {
   initialState: IBookingState = {
     bookings: [],
-    isFetchingBookings: false
+    isFetchingBookings: false,
+    isCancelingBooking: false
   };
 
   constructor(props: IBookingProps) {
@@ -48,16 +51,16 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
       {
         _id
         createdAt
+        updatedAt
         event {
           _id
           title
           price
+          date
         }
         user {
           _id
         }
-        updatedAt
-        createdAt
       }
       `;
 
@@ -104,6 +107,71 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
     );
   };
 
+  /** cancels a booking */
+  cancelBooking = (bookingId: string) => {
+    this.setState(
+      (state: IBookingState) => {
+        return {
+          isCancelingBooking: true
+        };
+      },
+      async () => {
+        const wantedFields = `
+      {
+        _id
+      }
+      `;
+
+        const requestBody = {
+          query: `
+        mutation {
+          cancelBooking(bookingId: "${bookingId}")
+          ${wantedFields}
+        }
+        `
+        };
+
+        try {
+          const token = this.props.appState.auth.token;
+          const response = await FetchService.fetchServer(requestBody, token);
+
+          if (response.errors) {
+            toast.error("An error occured cancelling booking");
+
+            return;
+          }
+
+          const eventObj: { cancelBooking: IEvent } = response.data;
+
+          if (!eventObj) {
+            throw new Error("An error occurred while cancelling booking");
+          }
+
+          toast.success("Booking cancelled!");
+
+          return this.setState((state: IBookingState) => {
+            const updatedBookings = this.state.bookings.filter(
+              booking => booking._id !== bookingId
+            );
+
+            return {
+              isCancelingBooking: false,
+              bookings: updatedBookings
+            };
+          });
+        } catch (error) {
+          toast.error("Sorry, could not cancel booking");
+
+          return this.setState((state: IBookingState) => {
+            return {
+              isCancelingBooking: false
+            };
+          });
+        }
+      }
+    );
+  };
+
   render() {
     const showBookingsTransition: number = 1000;
 
@@ -124,21 +192,11 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
                   You have no bookings
                 </Typography>
               ) : (
-                <ul>
-                  {this.state.bookings.map(booking => {
-                    return (
-                      <li key={booking._id}>
-                        <div>
-                          Booking created on:{" "}
-                          {new Date(booking.createdAt).toDateString()}
-                        </div>
-                        <div>Event ID: {booking.event._id}</div>
-                        <div>Title: {booking.event.title}</div>
-                        <div>Price: ${booking.event.price}</div>
-                      </li>
-                    );
-                  })}
-                </ul>
+                <BookingList
+                  bookings={this.state.bookings}
+                  cancelBooking={this.cancelBooking}
+                  isCancelingBooking={this.state.isCancelingBooking}
+                />
               )}
             </main>
           </Fade>
