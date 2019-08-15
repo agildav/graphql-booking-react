@@ -1,10 +1,12 @@
 import React from "react";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Typography from "@material-ui/core/Typography";
 import { CustomButton, CustomButtonProps } from "./button.component";
+import {
+  Dialog,
+  DialogTitle,
+  Typography,
+  DialogContent,
+  DialogActions
+} from "@material-ui/core";
 
 /** Custom props for modal dialog */
 export interface ICustomModalDialogProps {

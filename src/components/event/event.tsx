@@ -6,13 +6,13 @@ import { CustomInputTextField } from "../../shared/components/input.component";
 import { HTMLElementEvent } from "../../shared/adapter.model";
 import { CustomDateTimePicker } from "../../shared/components/date-time-picker.component";
 import { toast } from "react-toastify";
-import Fade from "@material-ui/core/Fade";
+import { Typography, Fade } from "@material-ui/core";
 import FetchService from "../../shared/fetch.service";
 import { EventList } from "./subcomponents/eventList/eventList";
 import { CustomSpinner } from "../../shared/components/spinner.component";
+import { IBooking } from "../booking/booking.model";
 
 import "./event.scss";
-import { IBooking } from "../booking/booking.model";
 
 /** Event component */
 class Event extends React.Component<IEventProps, IEventState> {
@@ -71,7 +71,7 @@ class Event extends React.Component<IEventProps, IEventState> {
 
     this.props.updateNavigation(currentNavigation);
 
-    return this.fetchEvents();
+    // return this.fetchEvents();
   }
 
   /** finds all the events */
@@ -546,18 +546,24 @@ class Event extends React.Component<IEventProps, IEventState> {
             in={!this.state.isFetchingEvents}
           >
             <main className="events-list">
-              <EventList
-                events={this.state.events}
-                appState={this.props.appState}
-                eventBookings={{
-                  closeEventModal: this.closeEventModal,
-                  handleEventBooking: this.handleEventBooking,
-                  isBookingEvent: this.state.isBookingEvent,
-                  isOpenEventBookingModal: this.state.isOpenEventBookingModal,
-                  openBookEventModal: this.openBookEventModal,
-                  selectedEventForBooking: this.state.selectedEventForBooking
-                }}
-              />
+              {this.state.events.length <= 0 ? (
+                <Typography variant="overline" color="textSecondary">
+                  There are no events
+                </Typography>
+              ) : (
+                <EventList
+                  events={this.state.events}
+                  appState={this.props.appState}
+                  eventBookings={{
+                    closeEventModal: this.closeEventModal,
+                    handleEventBooking: this.handleEventBooking,
+                    isBookingEvent: this.state.isBookingEvent,
+                    isOpenEventBookingModal: this.state.isOpenEventBookingModal,
+                    openBookEventModal: this.openBookEventModal,
+                    selectedEventForBooking: this.state.selectedEventForBooking
+                  }}
+                />
+              )}
             </main>
           </Fade>
         )}

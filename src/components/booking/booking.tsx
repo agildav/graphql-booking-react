@@ -4,7 +4,7 @@ import { INavigationState } from "../navigation/mainNavBar.model";
 import FetchService from "../../shared/fetch.service";
 import { toast } from "react-toastify";
 import { CustomSpinner } from "../../shared/components/spinner.component";
-import { Fade } from "@material-ui/core";
+import { Fade, Typography } from "@material-ui/core";
 
 import "./booking.scss";
 
@@ -119,21 +119,27 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
             in={!this.state.isFetchingBookings}
           >
             <main className="bookings-list">
-              <ul>
-                {this.state.bookings.map(booking => {
-                  return (
-                    <li key={booking._id}>
-                      <div>
-                        Booking created on:{" "}
-                        {new Date(booking.createdAt).toDateString()}
-                      </div>
-                      <div>Event ID: {booking.event._id}</div>
-                      <div>Title: {booking.event.title}</div>
-                      <div>Price: ${booking.event.price}</div>
-                    </li>
-                  );
-                })}
-              </ul>
+              {this.state.bookings.length <= 0 ? (
+                <Typography variant="overline" color="textSecondary">
+                  You have no bookings
+                </Typography>
+              ) : (
+                <ul>
+                  {this.state.bookings.map(booking => {
+                    return (
+                      <li key={booking._id}>
+                        <div>
+                          Booking created on:{" "}
+                          {new Date(booking.createdAt).toDateString()}
+                        </div>
+                        <div>Event ID: {booking.event._id}</div>
+                        <div>Title: {booking.event.title}</div>
+                        <div>Price: ${booking.event.price}</div>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
             </main>
           </Fade>
         )}
