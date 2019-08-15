@@ -1,6 +1,6 @@
 @import "shared/styles/colors";
 
-/* Main navbar */
+// Main navbar
 #MainNavBar {
   user-select: none;
   width: 100%;
@@ -11,7 +11,7 @@
     text-decoration: none;
   }
 
-  /* All elements inside the navbar */
+  // All elements inside the navbar
   nav .main-navbar-items {
     align-items: center;
     display: flex;
@@ -19,11 +19,60 @@
     flex-wrap: wrap;
     justify-content: flex-end;
 
-    /* Each navigation item */
+    // Each navigation item
     a:hover button,
     a:active button,
     a.active button {
       color: $selected-color;
     }
+  }
+
+  #NavbarMenuOpenButton {
+    display: none;
+  }
+
+  nav.main-navbar-wrapper {
+    ul {
+      a.auth {
+        display: block;
+      }
+    }
+  }
+
+  // If the screen size is 599px wide or less,
+  // hide the items in navbar except auth ones
+  // and show the hambuguer icon
+
+  @media only screen and (max-width: 599px) {
+    nav.main-navbar-wrapper {
+      ul {
+        a {
+          display: none;
+        }
+      }
+    }
+
+    #NavbarMenuOpenButton {
+      display: inline-flex;
+    }
+  }
+}
+
+#NavbarMenu {
+  user-select: none;
+
+  a {
+    button {
+      color: $text-secondary-color;
+    }
+    margin: 0;
+    text-decoration: none;
+  }
+
+  // Each navigation item
+  a:hover button,
+  a:active button,
+  a.active button {
+    color: $mui-primary-color;
   }
 }
