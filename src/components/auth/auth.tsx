@@ -201,6 +201,10 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     window.sessionStorage.setItem("token", token);
   };
 
+  removeAuthTokenInSession = () => {
+    window.sessionStorage.removeItem("token");
+  };
+
   /** register or sign in user */
   handleAuthUser = async (event: FormEvent): Promise<void> => {
     event.preventDefault();
