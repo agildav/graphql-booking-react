@@ -1,6 +1,5 @@
 import React from "react";
-// import { makeStyles } from "@material-ui/core/styles";
-import TextField from "@material-ui/core/TextField";
+import { TextField } from "@material-ui/core";
 
 /** Custom props for this input */
 export interface CustomInputTextFieldProps {
@@ -31,13 +30,6 @@ export interface CustomInputTextFieldProps {
   /** max number of rows */
   rowsMax?: number;
 }
-
-// const customInputTextFieldStyles = makeStyles(theme => ({
-//   root: {
-//     marginLeft: theme.spacing(1),
-//     marginRight: theme.spacing(1)
-//   }
-// }));
 
 export function CustomInputTextField(props: CustomInputTextFieldProps) {
   return (

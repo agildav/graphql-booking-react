@@ -9,7 +9,7 @@ export const Toastify = () => {
   // position of toast
   const position = "top-right";
   // in miliseconds
-  const autoCloseDelay = 1500;
+  const autoCloseDelay = 1200;
 
   return (
     <ToastContainer
