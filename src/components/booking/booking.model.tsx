@@ -20,4 +20,5 @@ export interface IBooking {
 /** Booking state */
 export interface IBookingState {
   bookings: IBooking[];
+  isFetchingBookings: boolean;
 }

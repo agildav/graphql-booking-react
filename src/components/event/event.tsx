@@ -537,7 +537,7 @@ class Event extends React.Component<IEventProps, IEventState> {
 
         {/* Events list */}
         {this.state.isFetchingEvents ? (
-          <div className="eventsSpinner">
+          <div className="events-spinner">
             <CustomSpinner variant="indeterminate" />
           </div>
         ) : (
@@ -545,7 +545,7 @@ class Event extends React.Component<IEventProps, IEventState> {
             timeout={showEventsTransition}
             in={!this.state.isFetchingEvents}
           >
-            <main className="eventsList">
+            <main className="events-list">
               <EventList
                 events={this.state.events}
                 appState={this.props.appState}
