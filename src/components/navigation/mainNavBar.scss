@@ -1,0 +1,29 @@
+@import "shared/styles/colors";
+
+/* Main navbar */
+#MainNavBar {
+  user-select: none;
+  width: 100%;
+
+  a {
+    color: white;
+    margin: 0 0.5rem;
+    text-decoration: none;
+  }
+
+  /* All elements inside the navbar */
+  nav .main-navbar-items {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    /* Each navigation item */
+    a:hover button,
+    a:active button,
+    a.active button {
+      color: $selected-color;
+    }
+  }
+}

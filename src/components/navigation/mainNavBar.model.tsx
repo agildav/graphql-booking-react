@@ -7,7 +7,8 @@ export interface IMainNavBarProps {
   logout: Function;
 }
 
-export interface INavigation {
+/** Navigation state of the app */
+export interface INavigationState {
   isAtLogin: boolean;
   isAtRegister: boolean;
   isAtEvents: boolean;

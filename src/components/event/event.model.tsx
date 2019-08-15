@@ -12,16 +12,24 @@ export interface IEventInput {
   title: string;
   description: string;
   price: number;
+  date: string;
 }
 
 /** Event model */
 export interface IEvent extends IEventInput {
-  _id: any;
-  date: string;
-  creator: IUser | string;
+  _id: string;
+  createdAt: string;
+  creator: IUser;
 }
 
 /** Event state */
 export interface IEventState {
   events: IEvent[];
+  createEventInput: IEventInput;
+  isOpenEventCreationModal: boolean;
+  isOpenEventBookingModal: boolean;
+  isCreatingEvent: boolean;
+  isBookingEvent: boolean;
+  isFetchingEvents: boolean;
+  selectedEventForBooking: IEvent;
 }

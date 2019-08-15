@@ -12,15 +12,14 @@ export interface IAuthInput {
   password: string;
 }
 
-/** Auth state */
+/** Auth model */
 export interface IAuth extends IAuthInput {
   userId: string;
   token: string;
   tokenExpiration: string;
 }
 
-/** Adapter between HTML elements and events with EventTarget */
-export interface HTMLElementEvent extends EventTarget {
-  target?: HTMLElement;
-  value?: any;
+/** Auth state */
+export interface IAuthState extends IAuth {
+  isHandlingAuth: boolean;
 }

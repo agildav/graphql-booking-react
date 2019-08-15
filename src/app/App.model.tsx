@@ -1,8 +1,8 @@
-import { IAuth } from "../components/auth/auth.model";
-import { INavigation } from "../components/navigation/mainNavBar.model";
+import { IAuthState } from "../components/auth/auth.model";
+import { INavigationState } from "../components/navigation/mainNavBar.model";
 
 /** Global main App state */
 export interface IAppState {
-  navigation: INavigation;
-  auth: IAuth;
+  navigation: INavigationState;
+  auth: IAuthState;
 }

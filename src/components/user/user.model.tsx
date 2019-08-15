@@ -8,7 +8,10 @@ export interface IUserInput extends IAuthInput {
 
 /** User model */
 export interface IUser extends IUserInput {
-  _id: any;
+  _id: string;
   createdAt: string;
-  createdEvents: IEvent[] | string[];
+  createdEvents: IEvent[];
 }
+
+/** User state */
+export interface IUserState extends IUser {}

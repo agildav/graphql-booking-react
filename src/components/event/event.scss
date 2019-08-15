@@ -1,0 +1,34 @@
+@import "shared/styles/colors";
+
+#Events {
+  #EventCreationButton {
+    border: 1px solid $border-box-color;
+    border-radius: 0.5rem;
+    margin: 0 auto;
+    max-width: 50%;
+    padding: 1rem;
+    width: 30rem;
+  }
+
+  .eventsSpinner,
+  .eventsList {
+    margin-top: 1rem;
+  }
+}
+
+/* Main modal */
+#create-event-modal .MuiPaper-root {
+  width: 30rem;
+
+  /* Modal content */
+  .create-event-form {
+    width: 100%;
+
+    .form-control div {
+      width: 100%;
+      width: -moz-available;
+      width: -webkit-fill-available;
+      width: stretch;
+    }
+  }
+}

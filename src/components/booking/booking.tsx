@@ -1,6 +1,6 @@
 import React from "react";
 import { IBookingProps, IBookingState } from "./booking.model";
-import { INavigation } from "../navigation/mainNavBar.model";
+import { INavigationState } from "../navigation/mainNavBar.model";
 
 /** Booking component */
 class Booking extends React.Component<IBookingProps, IBookingState> {
@@ -11,7 +11,11 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
   constructor(props: IBookingProps) {
     super(props);
 
-    const currentNavigation: INavigation = {
+    this.state = this.initialState;
+  }
+
+  componentDidMount() {
+    const currentNavigation: INavigationState = {
       isAtBookings: true,
       isAtEvents: false,
       isAtLogin: false,
@@ -20,12 +24,14 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
     };
 
     this.props.updateNavigation(currentNavigation);
-
-    this.state = this.initialState;
   }
 
   render() {
-    return <h1>Booking page</h1>;
+    return (
+      <div>
+        <h1>Booking page</h1>
+      </div>
+    );
   }
 }
 

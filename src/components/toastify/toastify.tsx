@@ -1,7 +1,7 @@
 import React from "react";
 import { ToastContainer, Slide } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./toastify.css";
+import "./toastify.scss";
 
 export const Toastify = () => {
   // identifier

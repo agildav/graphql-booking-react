@@ -3,18 +3,23 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Typography from "@material-ui/core/Typography";
 import { CustomButton, CustomButtonProps } from "./button.component";
 
 /** Custom props for modal dialog */
-export interface CustomModalDialogProps {
+export interface ICustomModalDialogProps {
+  /** open modal? */
+  isOpenModal: boolean;
+  /** on close modal handler */
+  onCloseModal: any;
   /** modal id */
-  modalId?: string;
+  modalId: string;
   /** modal title */
-  modalTitle: string;
+  modalTitle?: string;
   /** open button for the modal */
   openModalButton: CustomButtonProps & {
     /** open button title */
-    title?: string;
+    title: string;
   };
   /** cancel button */
   canCancel: boolean;
@@ -35,38 +40,48 @@ export interface CustomModalDialogProps {
 }
 
 /** Custom modal dialog opened by a custom button */
-export function CustomModalDialog(props: CustomModalDialogProps) {
-  const [open, setOpen] = React.useState(false);
-
-  function handleClickOpen() {
-    setOpen(true);
-  }
-
-  function handleClose() {
-    setOpen(false);
-  }
+export function CustomModalDialog(props: ICustomModalDialogProps) {
+  const isOpenModal: boolean = props.isOpenModal;
 
   return (
     <div>
-      <CustomButton {...props.openModalButton} onClick={handleClickOpen}>
+      <CustomButton
+        {...props.openModalButton}
+        onClick={props.openModalButton.onClick}
+        disabled={isOpenModal}
+      >
         {props.openModalButton.title}
       </CustomButton>
       <Dialog
         id={props.modalId}
-        open={open}
-        onClose={handleClose}
+        open={isOpenModal}
+        onClose={props.onCloseModal}
         aria-labelledby="form-dialog-title"
       >
-        <DialogTitle id="form-dialog-title">{props.modalTitle}</DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          <Typography align="left" variant="inherit">
+            {props.modalTitle}
+          </Typography>
+        </DialogTitle>
         <DialogContent>{props.children}</DialogContent>
         <DialogActions>
           {props.canCancel && (
-            <CustomButton {...props.cancelModalButton} onClick={handleClose}>
+            <CustomButton
+              {...props.cancelModalButton}
+              onClick={
+                props.cancelModalButton && props.cancelModalButton.onClick
+              }
+            >
               {props.cancelModalButton && props.cancelModalButton.title}
             </CustomButton>
           )}
           {props.canConfirm && (
-            <CustomButton onClick={handleClose} {...props.confirmModalButton}>
+            <CustomButton
+              onClick={
+                props.confirmModalButton && props.confirmModalButton.onClick
+              }
+              {...props.confirmModalButton}
+            >
               {props.confirmModalButton && props.confirmModalButton.title}
             </CustomButton>
           )}

@@ -67,19 +67,13 @@ export function CustomButton(props: CustomButtonProps) {
 
   return (
     <Button
-      id={props.id}
+      {...props}
       classes={{
         root: classes.root,
         contained: colorStyles,
         text: colorStyles,
         outlined: colorStyles
       }}
-      size={props.size}
-      type={props.type}
-      variant={props.variant}
-      color={props.color}
-      disabled={props.disabled}
-      onClick={props.onClick}
     >
       {props.children}
     </Button>

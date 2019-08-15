@@ -1,5 +1,5 @@
 import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
+// import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 
 /** Custom props for this input */
@@ -17,29 +17,35 @@ export interface CustomInputTextFieldProps {
   /** name of input */
   name?: string;
   /** type of input */
-  type?: "email" | "password" | string;
+  type?: "email" | "password" | "text" | string;
+  /** variant of input */
+  variant?: "outlined" | "standard" | "filled" | string | any;
+  /** take fullWidth */
+  fullWidth?: boolean;
+  /** max length of input */
+  maxLength?: number;
+  /** convert this into a textarea like */
+  multiline?: boolean;
+  /** number of initial rows */
+  rows?: number;
+  /** max number of rows */
+  rowsMax?: number;
 }
 
-const customStyles = makeStyles(theme => ({
-  root: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1)
-  }
-}));
+// const customInputTextFieldStyles = makeStyles(theme => ({
+//   root: {
+//     marginLeft: theme.spacing(1),
+//     marginRight: theme.spacing(1)
+//   }
+// }));
 
 export function CustomInputTextField(props: CustomInputTextFieldProps) {
-  const classes = customStyles();
-
   return (
     <TextField
-      autoComplete={props.autoComplete}
-      id={props.id}
-      onChange={props.onChange}
-      label={props.label}
-      name={props.name}
-      className={classes.root}
-      margin={props.margin}
-      type={props.type}
+      inputProps={{
+        maxLength: props.maxLength
+      }}
+      {...props}
     />
   );
 }
