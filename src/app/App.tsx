@@ -3,7 +3,7 @@ import MainNavbar from "../components/navigation/mainNavBar";
 import { IAppState } from "./App.model";
 import { IAuthState } from "../components/auth/auth.model";
 import { INavigationState } from "../components/navigation/mainNavBar.model";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 import Router from "./Router";
 
 import "./App.scss";
@@ -89,7 +89,7 @@ class App extends React.Component<{}, IAppState> {
   render() {
     return (
       <div id="App">
-        <BrowserRouter basename={process.env.PUBLIC_URL}>
+        <HashRouter>
           <MainNavbar
             appState={this.state}
             switchRegisterLogin={this.switchAuthModeChange}
@@ -100,7 +100,7 @@ class App extends React.Component<{}, IAppState> {
             authUser={this.authUser}
             updateNavigation={this.updateNavigation}
           />
-        </BrowserRouter>
+        </HashRouter>
       </div>
     );
   }
