@@ -22,4 +22,5 @@ export interface IAuth extends IAuthInput {
 /** Auth state */
 export interface IAuthState extends IAuth {
   isHandlingAuth: boolean;
+  isLoggingWithToken: boolean;
 }

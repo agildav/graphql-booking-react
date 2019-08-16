@@ -24,7 +24,8 @@ class App extends React.Component<{}, IAppState> {
       userId: "",
       token: "",
       tokenExpiration: "",
-      isHandlingAuth: false
+      isHandlingAuth: false,
+      isLoggingWithToken: false
     }
   };
 
@@ -67,7 +68,12 @@ class App extends React.Component<{}, IAppState> {
     });
   };
 
+  removeAuthTokenInLocalStorage = () => {
+    window.localStorage.removeItem("token");
+  };
+
   logoutUser = () => {
+    this.removeAuthTokenInLocalStorage();
     this.initState();
   };
 
