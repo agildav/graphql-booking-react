@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "5bab9ee95b741a25516c6cca6d6b9207",
+    "revision": "8bb93a400d894cccd45768f23d456cee",
     "url": "/graphql-booking-react/index.html"
   },
   {

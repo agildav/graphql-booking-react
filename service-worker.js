@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/graphql-booking-react/precache-manifest.1c4f3393da2aedf1063000fc8f2dd74e.js"
+  "/graphql-booking-react/precache-manifest.a357593f81440da36d55b35dc0bbe1a4.js"
 );
 
 self.addEventListener('message', (event) => {
