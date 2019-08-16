@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "a70b591251025a8a5e2225281a7286e6",
+    "revision": "eddb50a23d7c10694774b45bc1ce4269",
     "url": "/graphql-booking-react/index.html"
   },
   {
@@ -8,7 +8,7 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/graphql-booking-react/static/css/2.53f9f33b.chunk.css"
   },
   {
-    "revision": "3fe9d964a9dcf12e8e60",
+    "revision": "3b86062c7979c8e6eb99",
     "url": "/graphql-booking-react/static/css/main.2d0dcd46.chunk.css"
   },
   {
@@ -16,8 +16,8 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/graphql-booking-react/static/js/2.0553e6c5.chunk.js"
   },
   {
-    "revision": "3fe9d964a9dcf12e8e60",
-    "url": "/graphql-booking-react/static/js/main.dd99938d.chunk.js"
+    "revision": "3b86062c7979c8e6eb99",
+    "url": "/graphql-booking-react/static/js/main.622852ac.chunk.js"
   },
   {
     "revision": "0eb3c0c8763131fcb10e",
