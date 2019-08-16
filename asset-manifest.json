@@ -1,0 +1,18 @@
+{
+  "files": {
+    "main.css": "/agildav/graphql-booking-react/static/css/main.2d0dcd46.chunk.css",
+    "main.js": "/agildav/graphql-booking-react/static/js/main.dd99938d.chunk.js",
+    "main.js.map": "/agildav/graphql-booking-react/static/js/main.dd99938d.chunk.js.map",
+    "runtime~main.js": "/agildav/graphql-booking-react/static/js/runtime~main.ac9427da.js",
+    "runtime~main.js.map": "/agildav/graphql-booking-react/static/js/runtime~main.ac9427da.js.map",
+    "static/css/2.6a0f72a0.chunk.css": "/agildav/graphql-booking-react/static/css/2.6a0f72a0.chunk.css",
+    "static/js/2.0553e6c5.chunk.js": "/agildav/graphql-booking-react/static/js/2.0553e6c5.chunk.js",
+    "static/js/2.0553e6c5.chunk.js.map": "/agildav/graphql-booking-react/static/js/2.0553e6c5.chunk.js.map",
+    "index.html": "/agildav/graphql-booking-react/index.html",
+    "precache-manifest.8213e45ba12feb3766b9c9bf8bdac6c9.js": "/agildav/graphql-booking-react/precache-manifest.8213e45ba12feb3766b9c9bf8bdac6c9.js",
+    "service-worker.js": "/agildav/graphql-booking-react/service-worker.js",
+    "static/css/2.6a0f72a0.chunk.css.map": "/agildav/graphql-booking-react/static/css/2.6a0f72a0.chunk.css.map",
+    "static/css/main.2d0dcd46.chunk.css.map": "/agildav/graphql-booking-react/static/css/main.2d0dcd46.chunk.css.map",
+    "static/media/index.css": "/agildav/graphql-booking-react/static/media/roboto-latin-900italic.ebf6d164.woff2"
+  }
+}
