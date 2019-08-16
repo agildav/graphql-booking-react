@@ -89,7 +89,7 @@ class App extends React.Component<{}, IAppState> {
   render() {
     return (
       <div id="App">
-        <BrowserRouter>
+        <BrowserRouter basename={process.env.PUBLIC_URL}>
           <MainNavbar
             appState={this.state}
             switchRegisterLogin={this.switchAuthModeChange}
