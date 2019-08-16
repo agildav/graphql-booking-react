@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import { IAppState } from "../../app/App.model";
 import { HTMLElementEvent } from "../../shared/adapter.model";
 import "./auth.scss";
+import { CustomSpinner } from "../../shared/components/spinner.component";
 
 /** Authentication component */
 class Auth extends React.Component<IAuthProps, IAuthState> {
@@ -20,13 +21,52 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     token: "",
     tokenExpiration: "",
     userId: "",
-    isHandlingAuth: false
+    isHandlingAuth: false,
+    isLoggingWithToken: false
   };
 
   constructor(props: IAuthProps) {
     super(props);
 
     this.state = this.initialState;
+  }
+
+  getTokenFromLocalStorage = (): string | null => {
+    return window.localStorage.getItem("token");
+  };
+
+  componentDidMount() {
+    return this.setState(
+      (state: IAuthState) => {
+        return {
+          isLoggingWithToken: true,
+          isHandlingAuth: true
+        };
+      },
+      async () => {
+        const token = this.getTokenFromLocalStorage();
+        if (token) {
+          try {
+            await this.loginWithToken(token);
+            return;
+          } catch (error) {
+            return this.setState((state: IAuthState) => {
+              return {
+                isLoggingWithToken: false,
+                isHandlingAuth: false
+              };
+            });
+          }
+        }
+
+        return this.setState((state: IAuthState) => {
+          return {
+            isLoggingWithToken: false,
+            isHandlingAuth: false
+          };
+        });
+      }
+    );
   }
 
   /** Re-starts the state */
@@ -185,7 +225,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
           };
         },
         () => {
-          this.saveAuthTokenInSession(this.state.token);
+          this.saveAuthTokenInLocalStorage(this.state.token);
           this.props.authUser(this.state);
           return;
         }
@@ -197,12 +237,72 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     }
   };
 
-  saveAuthTokenInSession = (token: string) => {
-    window.sessionStorage.setItem("token", token);
+  /** signs in a valid user with existing token in local storage */
+  loginWithToken = async (tokenInput: string) => {
+    const wantedFields = `
+    {
+      userId
+      email
+      tokenExpiration
+    }
+    `;
+
+    const requestBody = {
+      query: `
+      query {
+        loginWithToken(tokenInput: {token: "${tokenInput}"})
+        ${wantedFields}
+      }
+      `
+    };
+
+    try {
+      const response = await FetchService.fetchServer(requestBody);
+
+      if (response.errors) {
+        toast.error("Invalid credentials");
+
+        return this.setState((state: IAuthState) => {
+          return {
+            isLoggingWithToken: false,
+            isHandlingAuth: false
+          };
+        });
+      }
+
+      const user: { loginWithToken: any } = response.data;
+      if (!user) {
+        throw new Error("An error occurred while signing in");
+      }
+
+      toast.success("Welcome to gEvent!");
+
+      return this.setState(
+        (state: IAuthState) => {
+          return {
+            userId: user.loginWithToken.userId,
+            email: user.loginWithToken.email,
+            password: "",
+            token: tokenInput,
+            tokenExpiration: user.loginWithToken.tokenExpiration,
+            isHandlingAuth: false,
+            isLoggingWithToken: false
+          };
+        },
+        () => {
+          this.props.authUser(this.state);
+          return;
+        }
+      );
+    } catch (error) {
+      toast.error("Sorry, could not login");
+
+      throw error;
+    }
   };
 
-  removeAuthTokenInSession = () => {
-    window.sessionStorage.removeItem("token");
+  saveAuthTokenInLocalStorage = (token: string) => {
+    window.localStorage.setItem("token", token);
   };
 
   /** register or sign in user */
@@ -273,7 +373,7 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
   render() {
     const appState: IAppState = this.props.appState;
 
-    return (
+    return !this.state.isLoggingWithToken ? (
       <form id="Auth" onSubmit={this.handleAuthUser}>
         <div className="form-control">
           <CustomInputTextField
@@ -310,6 +410,8 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
           </CustomButton>
         </div>
       </form>
+    ) : (
+      <CustomSpinner thickness={1} size={100} variant="indeterminate" />
     );
   }
 }
