@@ -112,7 +112,11 @@ class Event extends React.Component<IEventProps, IEventState> {
           if (response.errors) {
             toast.error("An error occured fetching events");
 
-            return;
+            return this.setState((state: IEventState) => {
+              return {
+                isFetchingEvents: false
+              };
+            });
           }
 
           const eventsObj: { events: IEvent[] } = response.data;

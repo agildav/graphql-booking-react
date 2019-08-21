@@ -5,6 +5,7 @@ import { IAuthState } from "../components/auth/auth.model";
 import { INavigationState } from "../components/navigation/mainNavBar.model";
 import { HashRouter } from "react-router-dom";
 import Router from "./Router";
+import FetchService from "../shared/fetch.service";
 
 import "./App.scss";
 
@@ -72,9 +73,38 @@ class App extends React.Component<{}, IAppState> {
     window.localStorage.removeItem("token");
   };
 
-  logoutUser = () => {
+  logoutUser = async () => {
+    const token = this.state.auth.token;
     this.removeAuthTokenInLocalStorage();
-    this.initState();
+    this.setState(
+      (state: IAppState) => {
+        return this.initialState;
+      },
+      async () => {
+        const wantedFields = `
+        {
+         userId
+        }
+        `;
+
+        const requestBody = {
+          query: `
+          query {
+            logout(tokenInput: {token: "${token}"})
+            ${wantedFields}
+          }
+          `
+        };
+
+        try {
+          await FetchService.fetchServer(requestBody);
+          return;
+        } catch (error) {
+          console.log("an error occurred trying to logout", error);
+          return;
+        }
+      }
+    );
   };
 
   /** Updates the navigation location */
@@ -101,6 +131,7 @@ class App extends React.Component<{}, IAppState> {
             updateNavigation={this.updateNavigation}
           />
         </HashRouter>
+        {/* <button onClick={() => console.log(this.state)}></button> */}
       </div>
     );
   }

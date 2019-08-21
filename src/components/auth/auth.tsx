@@ -180,7 +180,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
         {
           userId
           token
-          tokenExpiration
         }
         `;
 
@@ -220,7 +219,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
             email: userInput.email,
             password: "",
             token: user.login.token,
-            tokenExpiration: user.login.tokenExpiration,
             isHandlingAuth: false
           };
         },
@@ -243,7 +241,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
     {
       userId
       email
-      tokenExpiration
     }
     `;
 
@@ -284,7 +281,6 @@ class Auth extends React.Component<IAuthProps, IAuthState> {
             email: user.loginWithToken.email,
             password: "",
             token: tokenInput,
-            tokenExpiration: user.loginWithToken.tokenExpiration,
             isHandlingAuth: false,
             isLoggingWithToken: false
           };

@@ -16,7 +16,7 @@ export interface IAuthInput {
 export interface IAuth extends IAuthInput {
   userId: string;
   token: string;
-  tokenExpiration: string;
+  tokenExpiration?: string;
 }
 
 /** Auth state */

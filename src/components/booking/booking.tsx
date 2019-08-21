@@ -79,7 +79,11 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
           if (response.errors) {
             toast.error("An error occured fetching bookings");
 
-            return;
+            return this.setState((state: IBookingState) => {
+              return {
+                isFetchingBookings: false
+              };
+            });
           }
 
           const bookingsObj: { bookings: IBooking[] } = response.data;
@@ -138,7 +142,11 @@ class Booking extends React.Component<IBookingProps, IBookingState> {
           if (response.errors) {
             toast.error("An error occured cancelling booking");
 
-            return;
+            return this.setState((state: IBookingState) => {
+              return {
+                isCancelingBooking: false
+              };
+            });
           }
 
           const eventObj: { cancelBooking: IEvent } = response.data;
